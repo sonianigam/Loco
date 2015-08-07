@@ -15,17 +15,17 @@ import Foundation
 class NewLocationViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating, UITextFieldDelegate, UITextViewDelegate {
     
     var setLocation = KeyLocation()
-    let manager = CLLocationManager()
+    let locationManager = CLLocationManager()
     var searchTableViewController: SearchTableViewController?
     var placeholderLabel : UILabel!
     var searchController: UISearchController!
     var trackButton: UIButton!
-    
+    var homeViewController: HomeViewController?
+
     @IBOutlet weak var textView: UITextView!
     
     @IBAction func trackButtonTapped(sender: AnyObject) {
         var realm = Realm()
-        var homeViewController = HomeViewController()
         
         setLocation.locationTitle = userGeneratedName.text
         setLocation.notes = textView.text
@@ -33,11 +33,11 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
         setLocation.latitude = global.setItem.placemark.coordinate.latitude
         setLocation.address = "\(global.setItem.placemark.subThoroughfare) \(global.setItem.placemark.thoroughfare), \(global.setItem.placemark.locality), \(global.setItem.placemark.postalCode), \(global.setItem.placemark.administrativeArea)"
         setLocation.time = 0
-        
-        
+       
+
         if CLLocationManager.authorizationStatus() == .Denied {
             
-            manager.requestAlwaysAuthorization()
+            locationManager.requestAlwaysAuthorization()
             let alertController = UIAlertController(
                 title: "Background Location Access Disabled",
                 message: "In order to track locations, please open settings and set Loco's location access to 'Always'.",
@@ -68,15 +68,15 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
                 realm.add(self.setLocation)
             }
             
-            manager.startMonitoringSignificantLocationChanges()
-            homeViewController.startMonitoringTrackedRegion(setLocation)
+            homeViewController!.startMonitoringTrackedRegion(setLocation)
             
-            if global.setItem.placemark.coordinate.latitude == homeViewController.userLocation.coordinate.latitude && global.setItem.placemark.coordinate.longitude == homeViewController.userLocation.coordinate.longitude
+            
+            if global.setItem.placemark.coordinate.latitude == homeViewController!.userLocation.coordinate.latitude && global.setItem.placemark.coordinate.longitude == homeViewController!.userLocation.coordinate.longitude
             {
-                let currentRegion = homeViewController.setTrackedRegion(setLocation)
-                homeViewController.handleRegionEntranceEvent(currentRegion)
+                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
+                homeViewController!.handleRegionEntranceEvent(currentRegion)
             }
-            println(setLocation)
+            
             self.navigationController?.popToRootViewControllerAnimated(true)
         }
     }
@@ -96,7 +96,8 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var homeViewController = HomeViewController()
+        
+        println(self)
         textView.delegate = self
         mapView.delegate = self
         userGeneratedName.delegate = self
@@ -107,9 +108,8 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
             
         }
         
-        global.setItem = MKMapItem(placemark: MKPlacemark(coordinate: homeViewController.userLocation.coordinate, addressDictionary: nil))
-        
-        
+        global.setItem = MKMapItem(placemark: MKPlacemark(coordinate: homeViewController!.userLocation.coordinate, addressDictionary: nil))
+
         self.mapView.setUserTrackingMode(.Follow, animated: true)
         self.tableView.separatorColor = StyleConstants.defaultColor
         
@@ -130,11 +130,11 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
         case FollowWithHeading
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent?) {
-        println(touches)
-        println("test")
-        self.textView.endEditing(true)
-    }
+//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent?) {
+//        println(touches)
+//        println("test")
+//        self.textView.endEditing(true)
+//    }
     
     func textViewDidChange(textView: UITextView) {
         placeholderLabel.hidden = count(textView.text) != 0
@@ -179,8 +179,7 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
 
 extension NewLocationViewController: MKMapViewDelegate{
     
-    func mapView(mapView: MKMapView!,
-        viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
             
             if annotation is MKUserLocation {
                 return nil

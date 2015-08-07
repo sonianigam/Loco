@@ -17,6 +17,9 @@
 		E30E2F481B7004B100E5B61F /* TestLocations.gpx in Resources */ = {isa = PBXBuildFile; fileRef = E30E2F471B7004B100E5B61F /* TestLocations.gpx */; };
 		E34CBAA31B66E4CF00EE5070 /* KeyLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34CBAA21B66E4CF00EE5070 /* KeyLocation.swift */; };
 		E34CBAA51B67135800EE5070 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34CBAA41B67135800EE5070 /* SearchTableViewController.swift */; };
+		E3A7D7961B7521840029A315 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7951B7521840029A315 /* LocationManager.swift */; };
+		E3A7D7981B7538580029A315 /* LocationDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7971B7538580029A315 /* LocationDisplayViewController.swift */; };
+		E3A7D79A1B7541C90029A315 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7991B7541C90029A315 /* Visit.swift */; };
 		E3D8A13B1B66CE6300115815 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A13A1B66CE6300115815 /* AppDelegate.swift */; };
 		E3D8A1421B66CE6300115815 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1411B66CE6300115815 /* Images.xcassets */; };
 		E3D8A1451B66CE6300115815 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1431B66CE6300115815 /* LaunchScreen.xib */; };
@@ -64,6 +67,9 @@
 		E30E2F471B7004B100E5B61F /* TestLocations.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = TestLocations.gpx; sourceTree = "<group>"; };
 		E34CBAA21B66E4CF00EE5070 /* KeyLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyLocation.swift; sourceTree = "<group>"; };
 		E34CBAA41B67135800EE5070 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		E3A7D7951B7521840029A315 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		E3A7D7971B7538580029A315 /* LocationDisplayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDisplayViewController.swift; sourceTree = "<group>"; };
+		E3A7D7991B7541C90029A315 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
 		E3D8A1351B66CE6300115815 /* FinalApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinalApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D8A1391B66CE6300115815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E3D8A13A1B66CE6300115815 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +130,8 @@
 			children = (
 				E34CBAA21B66E4CF00EE5070 /* KeyLocation.swift */,
 				E30E2F391B6AE92A00E5B61F /* globalVariable.swift */,
+				E3A7D7951B7521840029A315 /* LocationManager.swift */,
+				E3A7D7991B7541C90029A315 /* Visit.swift */,
 			);
 			name = Entities;
 			path = FinalApp/Entities;
@@ -163,6 +171,7 @@
 				E3D8A15A1B66CEB800115815 /* HomeViewController.swift */,
 				E34CBAA41B67135800EE5070 /* SearchTableViewController.swift */,
 				E3D8A15B1B66CEB800115815 /* NewLocationViewController.swift */,
+				E3A7D7971B7538580029A315 /* LocationDisplayViewController.swift */,
 				E3D8A15E1B66CEE800115815 /* Main.storyboard */,
 				E3D8A1411B66CE6300115815 /* Images.xcassets */,
 				E3D8A1431B66CE6300115815 /* LaunchScreen.xib */,
@@ -249,6 +258,11 @@
 					E3D8A1341B66CE6300115815 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = EWNFYWUA5X;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					E3D8A1491B66CE6300115815 = {
 						CreatedOnToolsVersion = 6.4;
@@ -319,11 +333,14 @@
 			files = (
 				E3D8A15D1B66CEB800115815 /* NewLocationViewController.swift in Sources */,
 				E3D8A13B1B66CE6300115815 /* AppDelegate.swift in Sources */,
+				E3A7D7961B7521840029A315 /* LocationManager.swift in Sources */,
 				E34CBAA51B67135800EE5070 /* SearchTableViewController.swift in Sources */,
 				E30E2F3A1B6AE92A00E5B61F /* globalVariable.swift in Sources */,
 				E34CBAA31B66E4CF00EE5070 /* KeyLocation.swift in Sources */,
 				E30E2F3F1B6D645400E5B61F /* StyleConstants.swift in Sources */,
 				E30E2F381B6A9FB800E5B61F /* HomeTableCellViewCell.swift in Sources */,
+				E3A7D7981B7538580029A315 /* LocationDisplayViewController.swift in Sources */,
+				E3A7D79A1B7541C90029A315 /* Visit.swift in Sources */,
 				E3D8A15C1B66CEB800115815 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

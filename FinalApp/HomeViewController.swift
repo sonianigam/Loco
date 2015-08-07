@@ -15,11 +15,15 @@ import RealmSwift
 
 class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    
     var userLocation = CLLocation()
-    let manager = CLLocationManager()
+    var locationManager = CLLocationManager()
     var entryDate = NSDate()
     var exitDate = NSDate()
     var timeInterval = Double()
+    var LocManager = LocationManager()
+    var segueLocation: KeyLocation?
     
     var keyLocations: Results<KeyLocation>! {
         didSet {
@@ -34,9 +38,12 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         tableView.dataSource = self
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        manager.requestAlwaysAuthorization()
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+        userLocation = LocManager.currentLocation
+        
         
         func loadList(notification: NSNotification)
         {
@@ -45,11 +52,21 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadList:",name:"load", object: nil)
         
-        
-        
         let realm = Realm()
         keyLocations = realm.objects(KeyLocation)
         tableView.reloadData()
+//
+//        //pull to refresh
+//        
+//        self.refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+//        
+//        func refresh(sender:AnyObject)
+//        {
+//            
+//            viewDidAppear(true)
+//            self.refreshControl?.endRefreshing()
+//        }
+
         
         // Do any additional setup after loading the view.
     }
@@ -65,6 +82,35 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: segue
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        
+        
+        if segue.identifier == "segueToNewLocation"
+            
+        {
+            let newLocationViewController: NewLocationViewController = segue.destinationViewController as! NewLocationViewController
+            println(newLocationViewController)
+            newLocationViewController.homeViewController = self
+            
+        }
+        
+        if segue.identifier == "segueToLocationDisplay"
+            
+        {
+            let locationDisplayViewController: LocationDisplayViewController = segue.destinationViewController as! LocationDisplayViewController
+            println(locationDisplayViewController)
+            locationDisplayViewController.keyLocation = segueLocation
+            locationDisplayViewController.homeViewController = self
+            
+        }
+        
+    }
+    
+   
+    
 }
 
 
@@ -87,6 +133,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
     {
+       
         if (editingStyle == .Delete) {
             let keyLocation = keyLocations[indexPath.row]
             stopMonitoringTrackedRegion(keyLocation)
@@ -94,58 +141,46 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             realm.write() {
                 realm.delete(keyLocation)
             }
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-            
-            if keyLocations.count == 0
-            {
-                manager.stopMonitoringSignificantLocationChanges()
-            }
             
             tableView.reloadData()
             
         }
     }
-    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        segueLocation = keyLocations[indexPath.row]
+        self.performSegueWithIdentifier("segueToLocationDisplay", sender: nil)
+    }
 }
 
 extension HomeViewController: CLLocationManagerDelegate
 {
     func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
-        
+        println("this is the KeyLocation coming in ---> \(trackedRegion)")
         var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(0.15)
-        let region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
+        var radius = CLLocationDistance(0.001)
+        var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
         return region
     }
     
     func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
     {
-        let region = setTrackedRegion(trackedRegion)
-        manager.startMonitoringForRegion(region)
+        println(KeyLocation)
+        var region = setTrackedRegion(trackedRegion)
+        println(region)
+        locationManager.startMonitoringForRegion(region)
     }
     
     func stopMonitoringTrackedRegion (trackedRegion: KeyLocation)
     {
-        for region in manager.monitoredRegions {
+        for region in locationManager.monitoredRegions {
             if let circularRegion = region as? CLCircularRegion {
                 if circularRegion.identifier == trackedRegion.locationTitle {
-                    manager.stopMonitoringForRegion(circularRegion)}}
+                    locationManager.stopMonitoringForRegion(circularRegion)}}
         }
     }
     
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        
-        NSLog("Location manager failed with error: %@", error)
-        if error.domain == kCLErrorDomain && CLError(rawValue: error.code) == CLError.Denied {
-            //user denied location services so stop updating manager
-            manager.stopUpdatingLocation()
-        }
-    }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        userLocation = locations.last as! CLLocation
-        println("Location Manager did upidate location")
-    }
     
     func handleRegionEntranceEvent(region: CLRegion!)
     {
@@ -158,7 +193,7 @@ extension HomeViewController: CLLocationManagerDelegate
     {
         let realm = Realm()
         exitDate = NSDate()
-        println(exitDate)
+        println("exit date ---->\(exitDate)")
         timeInterval = exitDate.timeIntervalSinceDate(entryDate)
         
         realm.write(){
@@ -167,7 +202,7 @@ extension HomeViewController: CLLocationManagerDelegate
                 if let keyLocation = trackedRegion as? KeyLocation {
                     if trackedRegion.locationTitle == region.identifier {
                         trackedRegion.time += self.timeInterval
-                        println("tracked region ---> \(trackedRegion.time)")
+                        println("total duration ---> \(trackedRegion.time)")
                     }
                 }
             }
@@ -176,18 +211,10 @@ extension HomeViewController: CLLocationManagerDelegate
         }
     }
     
+   
     
-    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
-        if region is CLCircularRegion {
-            handleRegionEntranceEvent(region)
-        }
-    }
     
-    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
-        if region is CLCircularRegion {
-            handleRegionExitEvent(region)
-        }
-    }
+        
 }
 
 

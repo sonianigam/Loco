@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 
 class SearchTableViewController: UITableViewController, UISearchControllerDelegate {
-    let manager = CLLocationManager()
+    var locationManager = CLLocationManager()
     var searchController: UISearchController!
     var results = [AnyObject]()
     var newLocationViewController: NewLocationViewController?
@@ -24,6 +24,7 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.separatorColor = StyleConstants.defaultColor
+        
         
         // println(manager.monitoredRegions)
     }

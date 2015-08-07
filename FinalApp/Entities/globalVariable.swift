@@ -12,4 +12,3 @@ import MapKit
 struct global {
     static var setItem = MKMapItem()
 }
-

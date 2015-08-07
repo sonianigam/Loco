@@ -20,5 +20,6 @@ class KeyLocation: Object {
     dynamic var notes: String = ""
     dynamic var locationTitle : String = ""
     dynamic var time: Double = 0
+    dynamic var visits = [Visit]()
 
 }
