@@ -12,32 +12,112 @@ import CoreLocation
 import RealmSwift
 import Foundation
 
-class NewLocationViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating, UITextFieldDelegate, UITextViewDelegate {
+class NewLocationViewController: UITableViewController {
     
+    // MARK: vars ***********************************************************************
+    
+    enum MKUserTrackingMode : Int {
+        case None
+        case Follow
+        case FollowWithHeading
+    }
+
+    let sharedLocation = LocationManager.sharedLocationManager
     var setLocation = KeyLocation()
-    let locationManager = CLLocationManager()
     var searchTableViewController: SearchTableViewController?
     var placeholderLabel : UILabel!
     var searchController: UISearchController!
     var trackButton: UIButton!
-    var homeViewController: HomeViewController?
 
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var userGeneratedName: UITextField!
+    
+    // MARK: ************************************************************************
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.mapView.setUserTrackingMode(.Follow, animated: true)
+        self.tableView.separatorColor = StyleConstants.defaultColor
+        addLabelForTextViewPlaceholderText()
+        setupSearchController()
+        
+        sharedLocation.getUserLocationWithClosure { (aLocation, error) -> Void in
+            if (error != nil) {
+                println("there was an error updating current location")
+                return
+            }
+            // ponder this: when this VC opens the user's current location is set, but if they move the current location will not be updated.
+            // in the future, if the user does not set a specific address via the search bar, find a way to make sure the address is updated
+            // use a boolean in the search controller to indicate -  just a thought
+            global.setItem = MKMapItem(placemark: MKPlacemark(coordinate: self.sharedLocation.currentLocation.coordinate, addressDictionary: nil))
+            println("-------> \(global.setItem)")
+        }
+        
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     @IBAction func trackButtonTapped(sender: AnyObject) {
-        var realm = Realm()
         
-        setLocation.locationTitle = userGeneratedName.text
-        setLocation.notes = textView.text
-        setLocation.longitude = global.setItem.placemark.coordinate.longitude
-        setLocation.latitude = global.setItem.placemark.coordinate.latitude
-        setLocation.address = "\(global.setItem.placemark.subThoroughfare) \(global.setItem.placemark.thoroughfare), \(global.setItem.placemark.locality), \(global.setItem.placemark.postalCode), \(global.setItem.placemark.administrativeArea)"
-        setLocation.time = 0
-       
+        let isAuth = checkForLocationAuth()
+        
+        if userGeneratedName.text == "" {
+            let alertController = UIAlertController(
+                title: "Oops!",
+                message: "Please enter your location's name",
+                preferredStyle: .Alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            alertController.view.tintColor = StyleConstants.defaultColor
+            presentViewController(alertController, animated: true, completion: nil)
+        } else {
+            var realm = Realm()
+            setLocation.locationTitle = userGeneratedName.text
+            setLocation.notes = textView.text
+            setLocation.longitude = global.setItem.placemark.coordinate.longitude
+            setLocation.latitude = global.setItem.placemark.coordinate.latitude
+            setLocation.address = "\(global.setItem.placemark.subThoroughfare) \(global.setItem.placemark.thoroughfare), \(global.setItem.placemark.locality), \(global.setItem.placemark.postalCode), \(global.setItem.placemark.administrativeArea)"
+            setLocation.time = 0
+            realm.write() {
+                realm.add(self.setLocation)
+            }
+            println(setLocation)
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }
+        
+    }
+    
+    
+    
+    // LETS NOT FORGET ABOUT THIS!!!!!!!  *********************************
+    
+    
+//            homeViewController!.startMonitoringTrackedRegion(setLocation)
 
+//            let aBool = global.setItem.placemark.coordinate as CLLocationCoordinate2D == sharedLocation.currentLocation.coordinate as CLLocationCoordinate2D
+//            if aBool {
+//                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
+//                homeViewController!.handleRegionEntranceEvent(currentRegion)
+//            }
+
+    
+//    func updateSearchResultsForSearchController(searchController: UISearchController){
+//        
+//    }
+    
+    
+//        func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+//            mapView.showsUserLocation = status == .AuthorizedAlways
+//
+//        }
+
+    func checkForLocationAuth() -> Bool{
         if CLLocationManager.authorizationStatus() == .Denied {
-            
-            locationManager.requestAlwaysAuthorization()
+            sharedLocation.locationManager.requestAlwaysAuthorization()
             let alertController = UIAlertController(
                 title: "Background Location Access Disabled",
                 message: "In order to track locations, please open settings and set Loco's location access to 'Always'.",
@@ -50,100 +130,16 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
             
             alertController.addAction(openAction)
             self.presentViewController(alertController, animated: true, completion: nil)
+            return false
+        } else {
+            return true
         }
-        
-        if setLocation.locationTitle == ""
-        {
-            let alertController = UIAlertController(
-                title: "Oops!",
-                message: "Please enter your location's name",
-                preferredStyle: .Alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            alertController.view.tintColor = StyleConstants.defaultColor
-            presentViewController(alertController, animated: true, completion: nil)
-        }
-            
-        else {
-            realm.write() {
-                realm.add(self.setLocation)
-            }
-            
-            homeViewController!.startMonitoringTrackedRegion(setLocation)
-            
-            
-            if global.setItem.placemark.coordinate.latitude == homeViewController!.userLocation.coordinate.latitude && global.setItem.placemark.coordinate.longitude == homeViewController!.userLocation.coordinate.longitude
-            {
-                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
-                homeViewController!.handleRegionEntranceEvent(currentRegion)
-            }
-            
-            self.navigationController?.popToRootViewControllerAnimated(true)
-        }
-    }
-    
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var userGeneratedName: UITextField!
-    
-    func updateSearchResultsForSearchController(searchController: UISearchController){
-        
-    }
-    
-    func textFieldShouldReturn(userText: UITextField) -> Bool {
-        userGeneratedName.resignFirstResponder()
-        return true;
-    }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        println(self)
-        textView.delegate = self
-        mapView.delegate = self
-        userGeneratedName.delegate = self
-        
-        func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-            
-            mapView.showsUserLocation = status == .AuthorizedAlways
-            
-        }
-        
-        global.setItem = MKMapItem(placemark: MKPlacemark(coordinate: homeViewController!.userLocation.coordinate, addressDictionary: nil))
 
-        self.mapView.setUserTrackingMode(.Follow, animated: true)
-        self.tableView.separatorColor = StyleConstants.defaultColor
-        
-        placeholderLabel = UILabel()
-        placeholderLabel.text = " enter additional notes about your location"
-        placeholderLabel.sizeToFit()
-        placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
-        textView.addSubview(placeholderLabel)
-        placeholderLabel.frame.origin = CGPointMake(5, textView.font.pointSize / 2)
-        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
-        setupSearchController()
-        
-    }
-    
-    enum MKUserTrackingMode : Int {
-        case None
-        case Follow
-        case FollowWithHeading
-    }
-    
-//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent?) {
-//        println(touches)
-//        println("test")
-//        self.textView.endEditing(true)
-//    }
-    
-    func textViewDidChange(textView: UITextView) {
-        placeholderLabel.hidden = count(textView.text) != 0
-        textView.textColor = StyleConstants.defaultColor
-        textView.font = UIFont(name: "Helvetica Neue", size: 16)
     }
     
     
-    //MARK: -SearchController
+    
+    //MARK: ui elements **************************************************************************
     
     func setupSearchController() {
         let searchTableViewController = SearchTableViewController()
@@ -166,18 +162,22 @@ class NewLocationViewController: UITableViewController, UISearchControllerDelega
         
         var textFieldInsideSearchBar = searchController.searchBar.valueForKey("searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = StyleConstants.defaultColor
-        
-        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func addLabelForTextViewPlaceholderText() {
+        placeholderLabel = UILabel()
+        placeholderLabel.text = " enter additional notes about your location"
+        placeholderLabel.sizeToFit()
+        placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
+        textView.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPointMake(5, textView.font.pointSize / 2)
+        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
     }
+
     
 }
 
-extension NewLocationViewController: MKMapViewDelegate{
+extension NewLocationViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
             
@@ -203,6 +203,24 @@ extension NewLocationViewController: MKMapViewDelegate{
 }
 
 
+extension NewLocationViewController: UITextViewDelegate {
+    
+    func textViewDidChange(textView: UITextView) {
+        placeholderLabel.hidden = count(textView.text) != 0
+        textView.textColor = StyleConstants.defaultColor
+        textView.font = UIFont(name: "Helvetica Neue", size: 16)
+    }
+
+}
+
+extension NewLocationViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(userText: UITextField) -> Bool {
+        userGeneratedName.resignFirstResponder()
+        return true;
+    }
+
+}
 
 
 

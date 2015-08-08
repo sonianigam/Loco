@@ -56,6 +56,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         println("app was launched")
+        
+        
+        
+        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
+        
+        if(!NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")){
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            
+            var localNotification: UILocalNotification = UILocalNotification()
+            let date = NSDate()
+            let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+            let components = cal?.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
+            let newDate = cal!.dateFromComponents(components!)
+            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 15, toDate: newDate!, options: nil)
+            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 37, toDate: finalDate!, options: nil)
+            localNotification.fireDate = finalDate
+            println(finalDate)
+            
+        }
     
         // Override point for customization after application launch.
         
@@ -69,6 +89,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         
         return true
+    }
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        println("Mess with the array")
+
+        //This is when you receive the notification
+        let date = NSDate()
+        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.hour = 15
+        components.minute = 38
+        components.second = 0
+        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
+        notification.fireDate = newDate!
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        
+        //do my shit here
     }
     
     

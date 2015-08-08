@@ -110,7 +110,7 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
             
             if status == .AuthorizedAlways
             {
-                aRequest.region = MKCoordinateRegionMakeWithDistance(homeViewController!.userLocation.coordinate, 32187, 32187)
+//                aRequest.region = MKCoordinateRegionMakeWithDistance(homeViewController!.userLocation.coordinate, 32187, 32187)
             }
         }
         
