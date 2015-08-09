@@ -14,22 +14,20 @@ import RealmSwift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate{
     
-    var homeViewController: HomeViewController?
     var window: UIWindow?
-    
+    let sharedLocation = LocationManager.sharedLocationManager
+    let locationManager = LocationManager.sharedLocationManager.locationManager
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         println(launchOptions)
         
         if launchOptions?[UIApplicationLaunchOptionsLocationKey] != nil {
             println(launchOptions![UIApplicationLaunchOptionsLocationKey])
-            // this means there is a location update
-            homeViewController = HomeViewController()
-            var locationManager = CLLocationManager()
-            locationManager.delegate = self
+             // this means there is a location update
             locationManager.requestAlwaysAuthorization()
+            locationManager.delegate = self
             locationManager.startUpdatingLocation()
-            
+//
             
             let alert = UIAlertView()
             alert.title = "Alert"
@@ -41,10 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         else
         {
              //this is when the app is launched normally
-            homeViewController = HomeViewController()
-            var locationManager = CLLocationManager()
-            locationManager.delegate = self
             locationManager.requestAlwaysAuthorization()
+            locationManager.delegate = self
             locationManager.startUpdatingLocation()
             
             let alert = UIAlertView()
@@ -59,23 +55,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         
         
-        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
-        
-        if(!NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")){
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            
-            var localNotification: UILocalNotification = UILocalNotification()
-            let date = NSDate()
-            let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-            let components = cal?.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
-            let newDate = cal!.dateFromComponents(components!)
-            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 15, toDate: newDate!, options: nil)
-            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 37, toDate: finalDate!, options: nil)
-            localNotification.fireDate = finalDate
-            println(finalDate)
-            
-        }
+//        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
+//        
+//        if(!NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")){
+//            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
+//            NSUserDefaults.standardUserDefaults().synchronize()
+//            
+//            var localNotification: UILocalNotification = UILocalNotification()
+//            let date = NSDate()
+//            let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+//            let components = cal?.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
+//            let newDate = cal!.dateFromComponents(components!)
+//            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 15, toDate: newDate!, options: nil)
+//            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 37, toDate: finalDate!, options: nil)
+//            localNotification.fireDate = finalDate
+//            println(finalDate)
+//            
+//        }
     
         // Override point for customization after application launch.
         
@@ -91,22 +87,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         return true
     }
     
-    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-        println("Mess with the array")
-
-        //This is when you receive the notification
-        let date = NSDate()
-        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = NSDateComponents()
-        components.hour = 15
-        components.minute = 38
-        components.second = 0
-        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
-        notification.fireDate = newDate!
-        UIApplication.sharedApplication().scheduleLocalNotification(notification)
-        
-        //do my shit here
-    }
+//    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+//        println("Mess with the array")
+//
+//        //This is when you receive the notification
+//        let date = NSDate()
+//        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+//        let components = NSDateComponents()
+//        components.hour = 15
+//        components.minute = 38
+//        components.second = 0
+//        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
+//        notification.fireDate = newDate!
+//        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+//        
+//        //do my shit here
+//    }
     
     
     func applicationWillResignActive(application: UIApplication) {
@@ -134,26 +130,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        let alert = UIAlertView()
-        alert.title = "Alert"
-        alert.message = "third if case \(locations.last?.description)"
-        alert.addButtonWithTitle("Understood")
-        alert.show()
+        
+        println("location was updated")
+        
+        //had to do this because it continuously updated the location when I went to the NewLocationViewController
+        var aLocation = locations.last as! CLLocation
+        sharedLocation.currentLocation = aLocation
+        sharedLocation.currentLocationClosure?(aLocation, nil)
+        locationManager.stopUpdatingLocation()
+
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         
+        NSLog("Location manager failed with error: %@", error)
+        if error.domain == kCLErrorDomain && CLError(rawValue: error.code) == CLError.Denied {
+            //user denied location services so stop updating manager
+            locationManager.stopUpdatingLocation()
+        }
     }
     
     func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
         if region is CLCircularRegion {
-            homeViewController!.handleRegionEntranceEvent(region)
+            sharedLocation.handleRegionEntranceEvent(region)
         }
     }
     
     func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
         if region is CLCircularRegion {
-            homeViewController!.handleRegionExitEvent(region)
+            sharedLocation.handleRegionExitEvent(region)
         }
     }
 

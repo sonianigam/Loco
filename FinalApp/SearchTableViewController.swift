@@ -24,8 +24,6 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.separatorColor = StyleConstants.defaultColor
-        
-        
         // println(manager.monitoredRegions)
     }
     
@@ -46,11 +44,10 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
         let cell = tableView.dequeueReusableCellWithIdentifier("searchCell", forIndexPath: indexPath) as! UITableViewCell
         let mapItem = results[indexPath.row] as! MKMapItem
         cell.textLabel?.text = "\(mapItem.placemark.subThoroughfare) \(mapItem.placemark.thoroughfare), \(mapItem.placemark.locality), \(mapItem.placemark.postalCode) \(mapItem.placemark.administrativeArea)"
-        
         cell.textLabel?.textColor = UIColor .grayColor()
-        
         return cell
     }
+    
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -94,7 +91,9 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
     }
 }
 
-//MARK: -Search
+
+//MARK: -Search **************************************************************************************************
+
 
 extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelegate, MKMapViewDelegate {
     
@@ -110,7 +109,7 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
             
             if status == .AuthorizedAlways
             {
-//                aRequest.region = MKCoordinateRegionMakeWithDistance(homeViewController!.userLocation.coordinate, 32187, 32187)
+                // aRequest.region = MKCoordinateRegionMakeWithDistance(homeViewController!.userLocation.coordinate, 32187, 32187)
             }
         }
         

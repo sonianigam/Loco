@@ -16,12 +16,8 @@ import RealmSwift
 class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     
     @IBOutlet weak var addButton: UIBarButtonItem!
-    
-    var entryDate = NSDate()
-    var exitDate = NSDate()
-    var timeInterval = Double()
+    let locationManager = LocationManager.sharedLocationManager.locationManager
     var segueLocation: KeyLocation?
-    
     var keyLocations: Results<KeyLocation>! {
         didSet {
             // Whenever keyLocations update, update the table view
@@ -35,13 +31,11 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         tableView.dataSource = self
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
-
-        
+        locationManager.requestAlwaysAuthorization()
         let realm = Realm()
         keyLocations = realm.objects(KeyLocation)
         tableView.reloadData()
         
-
     }
         
     override func didReceiveMemoryWarning() {
@@ -63,62 +57,6 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     }
     
 // MARK: ********************************************************************************************************
-    
-    func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
-        println("this is the KeyLocation coming in ---> \(trackedRegion)")
-        var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(0.001)
-        var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
-        region.notifyOnEntry = true
-        region.notifyOnExit = true
-        return region
-    }
-    
-    func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
-    {
-        println(KeyLocation)
-        var region = setTrackedRegion(trackedRegion)
-        println(region)
-//        locationManager.startMonitoringForRegion(region)
-    }
-    
-    func stopMonitoringTrackedRegion (trackedRegion: KeyLocation)
-    {
-//        for region in locationManager.monitoredRegions {
-//            if let circularRegion = region as? CLCircularRegion {
-//                if circularRegion.identifier == trackedRegion.locationTitle {
-//                    locationManager.stopMonitoringForRegion(circularRegion)}}
-//        }
-    }
-    
-    
-    func handleRegionEntranceEvent(region: CLRegion!)
-    {
-        entryDate = NSDate()
-        println("entry date ----> \(entryDate)")
-        
-    }
-    
-    func handleRegionExitEvent(region: CLRegion!) {
-        let realm = Realm()
-        exitDate = NSDate()
-        println("exit date ---->\(exitDate)")
-        timeInterval = exitDate.timeIntervalSinceDate(entryDate)
-        
-        realm.write(){
-            
-        for trackedRegion in self.keyLocations {
-            if let keyLocation = trackedRegion as? KeyLocation {
-                if trackedRegion.locationTitle == region.identifier {
-                    trackedRegion.time += self.timeInterval
-                    println("total duration ---> \(trackedRegion.time)")
-                }
-            }
-        }
-            
-            println("time interval ---> \(self.timeInterval)")
-        }
-    }
 
     
 }
@@ -162,7 +100,18 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         segueLocation = keyLocations[indexPath.row]
         self.performSegueWithIdentifier("segueToLocationDisplay", sender: nil)
     }
+    
+    //MARK: Tracking ************************************************************************************
 
+    
+    func stopMonitoringTrackedRegion (trackedRegion: KeyLocation)
+    {
+        for region in locationManager.monitoredRegions {
+            if let circularRegion = region as? CLCircularRegion {
+                if circularRegion.identifier == trackedRegion.locationTitle {
+                    locationManager.stopMonitoringForRegion(circularRegion)}}
+        }
+    }
         
 }
 

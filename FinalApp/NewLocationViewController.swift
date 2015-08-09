@@ -21,14 +21,16 @@ class NewLocationViewController: UITableViewController {
         case Follow
         case FollowWithHeading
     }
-
+    
     let sharedLocation = LocationManager.sharedLocationManager
     var setLocation = KeyLocation()
     var searchTableViewController: SearchTableViewController?
     var placeholderLabel : UILabel!
     var searchController: UISearchController!
     var trackButton: UIButton!
-
+    let locationManager = LocationManager.sharedLocationManager.locationManager
+    
+    
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var userGeneratedName: UITextField!
@@ -52,11 +54,13 @@ class NewLocationViewController: UITableViewController {
             // in the future, if the user does not set a specific address via the search bar, find a way to make sure the address is updated
             // use a boolean in the search controller to indicate -  just a thought
             global.setItem = MKMapItem(placemark: MKPlacemark(coordinate: self.sharedLocation.currentLocation.coordinate, addressDictionary: nil))
-            println("-------> \(global.setItem)")
+            //println("-------> \(global.setItem)")
+            
         }
         
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -85,7 +89,8 @@ class NewLocationViewController: UITableViewController {
             realm.write() {
                 realm.add(self.setLocation)
             }
-            println(setLocation)
+            
+            startMonitoringTrackedRegion(setLocation)
             self.navigationController?.popToRootViewControllerAnimated(true)
         }
         
@@ -96,25 +101,25 @@ class NewLocationViewController: UITableViewController {
     // LETS NOT FORGET ABOUT THIS!!!!!!!  *********************************
     
     
-//            homeViewController!.startMonitoringTrackedRegion(setLocation)
-
-//            let aBool = global.setItem.placemark.coordinate as CLLocationCoordinate2D == sharedLocation.currentLocation.coordinate as CLLocationCoordinate2D
-//            if aBool {
-//                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
-//                homeViewController!.handleRegionEntranceEvent(currentRegion)
-//            }
-
+    //            homeViewController!.startMonitoringTrackedRegion(setLocation)
     
-//    func updateSearchResultsForSearchController(searchController: UISearchController){
-//        
-//    }
+    //            let aBool = global.setItem.placemark.coordinate as CLLocationCoordinate2D == sharedLocation.currentLocation.coordinate as CLLocationCoordinate2D
+    //            if aBool {
+    //                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
+    //                homeViewController!.handleRegionEntranceEvent(currentRegion)
+    //            }
     
     
-//        func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-//            mapView.showsUserLocation = status == .AuthorizedAlways
-//
-//        }
-
+    //    func updateSearchResultsForSearchController(searchController: UISearchController){
+    //
+    //    }
+    
+    
+    //        func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    //            mapView.showsUserLocation = status == .AuthorizedAlways
+    //
+    //        }
+    
     func checkForLocationAuth() -> Bool{
         if CLLocationManager.authorizationStatus() == .Denied {
             sharedLocation.locationManager.requestAlwaysAuthorization()
@@ -134,9 +139,39 @@ class NewLocationViewController: UITableViewController {
         } else {
             return true
         }
-
+        
     }
     
+    
+    
+    //MARK: initiate tracking **************************************************************************************
+    
+    func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
+        println("this is the KeyLocation coming in ---> \(trackedRegion)")
+        var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
+        var radius = CLLocationDistance(0.001)
+        var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
+        return region
+    }
+    
+    func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
+    {
+        var region = setTrackedRegion(trackedRegion)
+        
+        if region.containsCoordinate(self.sharedLocation.currentLocation.coordinate)
+        {
+            println("inside this region")
+            //sharedLocation.handleRegionEntranceEvent(region)
+            
+            sharedLocation.locationManager(locationManager, didEnterRegion: region)
+
+        }
+        
+        locationManager.startMonitoringForRegion(region)
+        
+    }
     
     
     //MARK: ui elements **************************************************************************
@@ -173,31 +208,31 @@ class NewLocationViewController: UITableViewController {
         placeholderLabel.frame.origin = CGPointMake(5, textView.font.pointSize / 2)
         placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
     }
-
+    
     
 }
 
 extension NewLocationViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-            
-            if annotation is MKUserLocation {
-                return nil
-            }
-            
-            let reuseId = "pin"
-            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
-            if pinView == nil {
-                pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-                pinView!.canShowCallout = true
-                pinView!.animatesDrop = true
-                pinView!.pinColor = .Purple
-            }
-            else {
-                pinView!.annotation = annotation
-            }
-            
-            return pinView
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.animatesDrop = true
+            pinView!.pinColor = .Purple
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
     }
     
 }
@@ -210,7 +245,7 @@ extension NewLocationViewController: UITextViewDelegate {
         textView.textColor = StyleConstants.defaultColor
         textView.font = UIFont(name: "Helvetica Neue", size: 16)
     }
-
+    
 }
 
 extension NewLocationViewController: UITextFieldDelegate {
@@ -219,7 +254,7 @@ extension NewLocationViewController: UITextFieldDelegate {
         userGeneratedName.resignFirstResponder()
         return true;
     }
-
+    
 }
 
 
