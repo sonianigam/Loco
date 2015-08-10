@@ -20,6 +20,8 @@
 		E3A7D7961B7521840029A315 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7951B7521840029A315 /* LocationManager.swift */; };
 		E3A7D7981B7538580029A315 /* LocationDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7971B7538580029A315 /* LocationDisplayViewController.swift */; };
 		E3A7D79A1B7541C90029A315 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D7991B7541C90029A315 /* Visit.swift */; };
+		E3A7D79C1B770CFE0029A315 /* LocationDisplayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D79B1B770CFE0029A315 /* LocationDisplayCell.swift */; };
+		E3A7D79E1B7723560029A315 /* RealmDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A7D79D1B7723560029A315 /* RealmDate.swift */; };
 		E3D8A13B1B66CE6300115815 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A13A1B66CE6300115815 /* AppDelegate.swift */; };
 		E3D8A1421B66CE6300115815 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1411B66CE6300115815 /* Images.xcassets */; };
 		E3D8A1451B66CE6300115815 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1431B66CE6300115815 /* LaunchScreen.xib */; };
@@ -70,6 +72,8 @@
 		E3A7D7951B7521840029A315 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		E3A7D7971B7538580029A315 /* LocationDisplayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDisplayViewController.swift; sourceTree = "<group>"; };
 		E3A7D7991B7541C90029A315 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
+		E3A7D79B1B770CFE0029A315 /* LocationDisplayCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDisplayCell.swift; sourceTree = "<group>"; };
+		E3A7D79D1B7723560029A315 /* RealmDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmDate.swift; sourceTree = "<group>"; };
 		E3D8A1351B66CE6300115815 /* FinalApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinalApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D8A1391B66CE6300115815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E3D8A13A1B66CE6300115815 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				E30E2F371B6A9FB800E5B61F /* HomeTableCellViewCell.swift */,
+				E3A7D79B1B770CFE0029A315 /* LocationDisplayCell.swift */,
 			);
 			name = Views;
 			path = FinalApp/Views;
@@ -132,6 +137,7 @@
 				E30E2F391B6AE92A00E5B61F /* globalVariable.swift */,
 				E3A7D7951B7521840029A315 /* LocationManager.swift */,
 				E3A7D7991B7541C90029A315 /* Visit.swift */,
+				E3A7D79D1B7723560029A315 /* RealmDate.swift */,
 			);
 			name = Entities;
 			path = FinalApp/Entities;
@@ -338,7 +344,9 @@
 				E30E2F3A1B6AE92A00E5B61F /* globalVariable.swift in Sources */,
 				E34CBAA31B66E4CF00EE5070 /* KeyLocation.swift in Sources */,
 				E30E2F3F1B6D645400E5B61F /* StyleConstants.swift in Sources */,
+				E3A7D79C1B770CFE0029A315 /* LocationDisplayCell.swift in Sources */,
 				E30E2F381B6A9FB800E5B61F /* HomeTableCellViewCell.swift in Sources */,
+				E3A7D79E1B7723560029A315 /* RealmDate.swift in Sources */,
 				E3A7D7981B7538580029A315 /* LocationDisplayViewController.swift in Sources */,
 				E3A7D79A1B7541C90029A315 /* Visit.swift in Sources */,
 				E3D8A15C1B66CEB800115815 /* HomeViewController.swift in Sources */,

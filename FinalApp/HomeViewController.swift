@@ -35,6 +35,7 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         let realm = Realm()
         keyLocations = realm.objects(KeyLocation)
         tableView.reloadData()
+        println(keyLocations)
         
     }
         

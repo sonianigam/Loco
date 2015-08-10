@@ -66,8 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 //            let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 //            let components = cal?.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
 //            let newDate = cal!.dateFromComponents(components!)
-//            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 15, toDate: newDate!, options: nil)
-//            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 37, toDate: finalDate!, options: nil)
+//            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 24, toDate: newDate!, options: nil)
+//            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 0, toDate: finalDate!, options: nil)
 //            localNotification.fireDate = finalDate
 //            println(finalDate)
 //            
@@ -76,11 +76,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // Override point for customization after application launch.
         
         UINavigationBar.appearance().barTintColor = StyleConstants.defaultColor
-        UINavigationBar.appearance().tintColor = UIColor.lightGrayColor()
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 22)!, NSForegroundColorAttributeName: UIColor.lightGrayColor()]
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 22)!, NSForegroundColorAttributeName: UIColor.whiteColor()]
         
         UIToolbar.appearance().barTintColor = StyleConstants.defaultColor
-        UIToolbar.appearance().tintColor = UIColor.lightGrayColor()
+        UIToolbar.appearance().tintColor = UIColor.whiteColor()
         UIToolbar.appearance().translucent = false
         UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         
@@ -94,8 +94,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 //        let date = NSDate()
 //        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 //        let components = NSDateComponents()
-//        components.hour = 15
-//        components.minute = 38
+//        components.hour = 24
+//        components.minute = 0
 //        components.second = 0
 //        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
 //        notification.fireDate = newDate!
@@ -125,6 +125,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+        
         println("app will terminate")
         
     }

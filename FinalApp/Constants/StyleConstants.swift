@@ -11,8 +11,9 @@ import Foundation
 import UIKit
 
 struct StyleConstants {
-    //static let defaultColor = UIColor(rgb: 0x4B2D73)
-    static let defaultColor = UIColor(rgb: 0x8108B5)
+    
+    static let defaultColor = UIColor(rgb: 0x981ADE)
+
     
 }
 

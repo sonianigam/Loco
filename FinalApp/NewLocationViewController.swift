@@ -149,7 +149,7 @@ class NewLocationViewController: UITableViewController {
     func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
         println("this is the KeyLocation coming in ---> \(trackedRegion)")
         var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(0.001)
+        var radius = CLLocationDistance(10.0)
         var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
         region.notifyOnEntry = true
         region.notifyOnExit = true
@@ -159,17 +159,17 @@ class NewLocationViewController: UITableViewController {
     func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
     {
         var region = setTrackedRegion(trackedRegion)
-        
+        println("inside this region")
+       // locationManager.requestStateForRegion(region)
+        locationManager.startMonitoringForRegion(region)
+
         if region.containsCoordinate(self.sharedLocation.currentLocation.coordinate)
         {
-            println("inside this region")
-            //sharedLocation.handleRegionEntranceEvent(region)
-            
             sharedLocation.locationManager(locationManager, didEnterRegion: region)
-
+            
         }
         
-        locationManager.startMonitoringForRegion(region)
+        //locationManager.startMonitoringForRegion(region)
         
     }
     
