@@ -26,13 +26,13 @@ class HomeTableCellTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    var keyLocation: KeyLocation? {
-        didSet {
-            if let keyLocation = keyLocation, locationTitle = locationTitle {
-                self.locationTitle.text = keyLocation.locationTitle
-            }
-        }
-    }
+//    var keyLocation: KeyLocation? {
+//        didSet {
+//            if let keyLocation = keyLocation, locationTitle = locationTitle {
+//                self.locationTitle.text = keyLocation.locationTitle
+//            }
+//        }
+//    }
     
     func configureCellWithKeyLocation(aKeyLocation: KeyLocation) {
         self.locationTitle.text = aKeyLocation.locationTitle

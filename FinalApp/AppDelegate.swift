@@ -23,10 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         if launchOptions?[UIApplicationLaunchOptionsLocationKey] != nil {
             println(launchOptions![UIApplicationLaunchOptionsLocationKey])
-             // this means there is a location update
+            // this means there is a location update
             locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
-
+            
             
             let alert = UIAlertView()
             alert.title = "Alert"
@@ -34,10 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             alert.addButtonWithTitle("Understood")
             alert.show()
         }
-        
+            
         else
         {
-             //this is when the app is launched normally
+            //this is when the app is launched normally
             locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
             
@@ -46,15 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             alert.message = "second if case"
             alert.addButtonWithTitle("Understood")
             alert.show()
-
+            
         }
         
-        println("app was launched")
-        
-        
-        
-        
-        
+    
         application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
         if(!NSUserDefaults.standardUserDefaults().boolForKey("Has Launched")){
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Has Launched")
@@ -63,17 +58,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             let date = NSDate()
             let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
             let components = calendar!.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
-            components.hour = 23
-            components.minute = 59
+            components.hour = 12
+            components.minute = 46
             components.second = 0
             let newDate = calendar!.dateFromComponents(components)
             localNotification.fireDate = newDate
             UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
         }
         
-
         
-    
+        
+        
         // Override point for customization after application launch.
         
         UINavigationBar.appearance().barTintColor = StyleConstants.defaultColor
@@ -90,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         println("Mess with the array")
-
+        
         //This is when you receive the notification
         let date = NSDate()
         let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
@@ -102,9 +97,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         notification.fireDate = newDate!
         UIApplication.sharedApplication().scheduleLocalNotification(notification)
         
-        //do my shit here
+        //reset the times to be 0 at midnight
+        let realm = Realm()
+        let today = NSDate()
         
-        
+        if sharedLocation.keyLocations != nil {
+            
+        for region in sharedLocation.keyLocations
+        {
+            
+            
+            realm.write()
+                {
+                    if region.visits.count == 7
+                    {
+                        region.visits.delete(region.visits.first)
+                    }
+                    
+                    let currentVisit = Visit()
+                    currentVisit.duration = region.time
+                    region.visits.append(currentVisit)
+                    region.time = 0
+            }
+        }
+        }
     }
     
     
@@ -128,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    
+        
         
         println("app will terminate")
         
@@ -143,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         sharedLocation.currentLocation = aLocation
         sharedLocation.currentLocationClosure?(aLocation, nil)
         locationManager.stopUpdatingLocation()
-
+        
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
@@ -166,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             sharedLocation.handleRegionExitEvent(region)
         }
     }
-
+    
 }
 
 

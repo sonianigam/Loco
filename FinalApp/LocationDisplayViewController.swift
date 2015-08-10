@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class LocationDisplayViewController: UIViewController {
     
@@ -17,13 +18,17 @@ class LocationDisplayViewController: UIViewController {
     @IBOutlet weak var locationNotesTextView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     var placeholderLabel = UILabel()
+    var keyLocationVisits = List<Visit>()
+    var dateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         locationTimeLabel.text = "today: \(printSecondsToHoursMinutesSeconds(keyLocation!.time))"
         locationNameLabel.text = keyLocation!.locationTitle
         locationNotesTextView.text = keyLocation!.notes
-        self.tableView.separatorColor = StyleConstants.defaultColor
+        keyLocationVisits = keyLocation!.visits
+        tableView.separatorColor = StyleConstants.defaultColor
+        tableView.dataSource = self
 
         
         if locationNotesTextView.text == ""
@@ -60,9 +65,34 @@ class LocationDisplayViewController: UIViewController {
         return string
     }
     
-     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+  
+    
+}
+
+
+extension LocationDisplayViewController: UITableViewDataSource
+    
+{
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return keyLocation!.visits.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("LocationCell") as! LocationDisplayCell
+        let row = indexPath.row
+        let dailyData = keyLocationVisits[row]
+
+        cell.configureCellWithDate(dailyData)
+        cell.configureCellWithTime(dailyData)
+        return cell
+        
+    }
+    
     
 }
 

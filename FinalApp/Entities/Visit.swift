@@ -11,6 +11,5 @@ import RealmSwift
 
 class Visit: Object {
     dynamic var date = NSDate()
-    dynamic var note: String = ""
     dynamic var duration: Double = 0.0
 }
