@@ -25,9 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             println(launchOptions![UIApplicationLaunchOptionsLocationKey])
              // this means there is a location update
             locationManager.requestAlwaysAuthorization()
-            locationManager.delegate = self
             locationManager.startUpdatingLocation()
-//
+
             
             let alert = UIAlertView()
             alert.title = "Alert"
@@ -40,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         {
              //this is when the app is launched normally
             locationManager.requestAlwaysAuthorization()
-            locationManager.delegate = self
             locationManager.startUpdatingLocation()
             
             let alert = UIAlertView()
@@ -55,23 +53,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         
         
-//        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
-//        
-//        if(!NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")){
-//            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
-//            NSUserDefaults.standardUserDefaults().synchronize()
-//            
-//            var localNotification: UILocalNotification = UILocalNotification()
-//            let date = NSDate()
-//            let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-//            let components = cal?.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
-//            let newDate = cal!.dateFromComponents(components!)
-//            var finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitHour, value: 24, toDate: newDate!, options: nil)
-//            finalDate = cal!.dateByAddingUnit(NSCalendarUnit.CalendarUnitMinute, value: 0, toDate: finalDate!, options: nil)
-//            localNotification.fireDate = finalDate
-//            println(finalDate)
-//            
-//        }
+        
+        
+        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
+        if(!NSUserDefaults.standardUserDefaults().boolForKey("Has Launched")){
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Has Launched")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            var localNotification:UILocalNotification = UILocalNotification()
+            let date = NSDate()
+            let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+            let components = calendar!.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
+            components.hour = 23
+            components.minute = 59
+            components.second = 0
+            let newDate = calendar!.dateFromComponents(components)
+            localNotification.fireDate = newDate
+            UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        }
+        
+
+        
     
         // Override point for customization after application launch.
         
@@ -87,22 +88,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         return true
     }
     
-//    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-//        println("Mess with the array")
-//
-//        //This is when you receive the notification
-//        let date = NSDate()
-//        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-//        let components = NSDateComponents()
-//        components.hour = 24
-//        components.minute = 0
-//        components.second = 0
-//        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
-//        notification.fireDate = newDate!
-//        UIApplication.sharedApplication().scheduleLocalNotification(notification)
-//        
-//        //do my shit here
-//    }
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        println("Mess with the array")
+
+        //This is when you receive the notification
+        let date = NSDate()
+        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.hour = 24
+        components.minute = 0
+        components.second = 0
+        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
+        notification.fireDate = newDate!
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        
+        //do my shit here
+        
+        
+    }
     
     
     func applicationWillResignActive(application: UIApplication) {
