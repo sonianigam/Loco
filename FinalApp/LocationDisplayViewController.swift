@@ -22,11 +22,18 @@ class LocationDisplayViewController: UIViewController {
     var placeholderTVLabel = UILabel()
     var keyLocationVisits = List<Visit>()
     var dateFormatter = NSDateFormatter()
+    var totalTime = Double()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationTimeLabel.text = "today: \(printSecondsToHoursMinutesSeconds(keyLocation!.time))"
+    
+        for visit in keyLocation!.visits
+        {
+            totalTime += visit.duration
+        }
+        
+        locationTimeLabel.text = "total: \(printSecondsToHoursMinutesSeconds(totalTime))"
         locationNameLabel.text = keyLocation!.locationTitle
         locationNotesTextView.text = keyLocation!.notes
         keyLocationVisits = keyLocation!.visits
@@ -40,12 +47,13 @@ class LocationDisplayViewController: UIViewController {
             placeholderLabel.text = "no saved notes about your location"
             placeholderLabel.sizeToFit()
             placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
-            locationNotesTextView.addSubview(placeholderLabel)
             placeholderLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
             placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
-            placeholderLabel.textAlignment = NSTextAlignment.Center
-            placeholderLabel.center = CGPointMake(170, 17)
-            // placeholderLabel.center = locationNotesTextView.center
+
+            var size = UIScreen.mainScreen().bounds.size.width/2.1
+            println("\(size)")
+            locationNotesTextView.addSubview(placeholderLabel)
+            placeholderLabel.center = CGPointMake(size, 16)
         }
         
         // Do any additional setup after loading the view.
@@ -96,34 +104,26 @@ extension LocationDisplayViewController: UITableViewDataSource
             let dailyData = keyLocationVisits[row]
             let today = NSDate()
             
-            if dailyData.date.timeIntervalSinceDate(today) < 604800
-            {
                 cell.configureCellWithDate(dailyData)
                 cell.configureCellWithTime(dailyData)
                 cell.configureCellWithTimeStamp(dailyData)
-            }
-            else
-            {
-                realm.write()
-                    {
-                        realm.delete(dailyData)
-                }
-            }
+
+
         
             placeholderTVLabel.text = ""
         }
         else {
-            placeholderTVLabel.text = "here you will find a weekly view!"
+            placeholderTVLabel.text = "no visits for this location yet!"
             placeholderTVLabel.sizeToFit()
             placeholderTVLabel.font = UIFont( name: "Helvetica Neue", size: 16)
             tableView.addSubview(placeholderTVLabel)
             placeholderTVLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
             placeholderTVLabel.textColor = UIColor(white: 0, alpha: 0.22)
-            placeholderTVLabel.textAlignment = NSTextAlignment.Center
-            placeholderTVLabel.center = CGPointMake(180, 50)
-            
+            var size = UIScreen.mainScreen().bounds.size.width/1.96
+            placeholderTVLabel.center = CGPointMake(size, 50)
             cell.dailyDate.text = ""
             cell.dailyDuration.text = ""
+            cell.dailyEntryTime.text = ""
             
         }
         

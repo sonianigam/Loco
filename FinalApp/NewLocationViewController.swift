@@ -58,7 +58,6 @@ class NewLocationViewController: UITableViewController {
             
         }
         
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -165,7 +164,8 @@ class NewLocationViewController: UITableViewController {
         searchController.searchBar.sizeToFit()
         definesPresentationContext = true
         searchController.searchBar.placeholder = "change location"
-        searchController.searchBar.tintColor = StyleConstants.defaultColor
+        searchController.searchBar.tintColor = UIColor.whiteColor()
+        searchController.searchBar.barTintColor = StyleConstants.defaultColor
         searchController.searchBar.returnKeyType = UIReturnKeyType.Search
         searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.showsCancelButton = false

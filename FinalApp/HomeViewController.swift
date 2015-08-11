@@ -24,6 +24,7 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
             tableView?.reloadData()
         }
     }
+    var newLocations = [KeyLocation]()
     
     override func viewDidLoad() {
         
@@ -36,6 +37,11 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         println(keyLocations)
         
     }
+    
+    func descending(d1: KeyLocation, d2: KeyLocation) -> Bool{
+        return d1.time > d2.time
+    }
+    
     
     override func viewDidAppear(animated: Bool) {
         println("view did appear")
