@@ -8,12 +8,14 @@
 
 import UIKit
 import Foundation
+import RealmSwift
 
 class HomeTableCellTableViewCell: UITableViewCell {
 
     
     @IBOutlet weak var locationTitle: UILabel!
     @IBOutlet weak var timeStamp: UILabel!
+    var totalDailyDuration = Double()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,6 +43,23 @@ class HomeTableCellTableViewCell: UITableViewCell {
     
     func configureCellWithTime (aKeyLocation: KeyLocation)
     {
+        let realm = Realm()
+        var today = NSDate()
+        totalDailyDuration = 0
+        for aVisit in aKeyLocation.visits
+        {
+            if aVisit.date.timeIntervalSinceDate(today) < 86400
+            {
+                totalDailyDuration += aVisit.duration
+            }
+        }
+    
+        realm.write()
+            {
+                aKeyLocation.time = self.totalDailyDuration
+        }
+        
+        
         self.timeStamp.text = printSecondsToHoursMinutesSeconds(aKeyLocation.time)
 
     }

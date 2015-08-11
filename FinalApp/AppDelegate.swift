@@ -26,13 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             // this means there is a location update
             locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
-            
-            
-            let alert = UIAlertView()
-            alert.title = "Alert"
-            alert.message = "first if case"
-            alert.addButtonWithTitle("Understood")
-            alert.show()
+   
         }
             
         else
@@ -41,33 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             locationManager.requestAlwaysAuthorization()
             locationManager.startUpdatingLocation()
             
-            let alert = UIAlertView()
-            alert.title = "Alert"
-            alert.message = "second if case"
-            alert.addButtonWithTitle("Understood")
-            alert.show()
-            
         }
         
-    
-        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Badge, categories: nil))
-        if(!NSUserDefaults.standardUserDefaults().boolForKey("Has Launched")){
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Has Launched")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            var localNotification:UILocalNotification = UILocalNotification()
-            let date = NSDate()
-            let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-            let components = calendar!.components(.CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear, fromDate: date)
-            components.hour = 12
-            components.minute = 46
-            components.second = 0
-            let newDate = calendar!.dateFromComponents(components)
-            localNotification.fireDate = newDate
-            UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
-        }
-        
-        
-        
+
         
         // Override point for customization after application launch.
         
@@ -83,46 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         return true
     }
     
-    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-        println("Mess with the array")
-        
-        //This is when you receive the notification
-        let date = NSDate()
-        let cal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = NSDateComponents()
-        components.hour = 24
-        components.minute = 0
-        components.second = 0
-        let newDate = cal!.dateByAddingComponents(components, toDate: date, options: nil)
-        notification.fireDate = newDate!
-        UIApplication.sharedApplication().scheduleLocalNotification(notification)
-        
-        //reset the times to be 0 at midnight
-        let realm = Realm()
-        let today = NSDate()
-        
-        if sharedLocation.keyLocations != nil {
-            
-        for region in sharedLocation.keyLocations
-        {
-            
-            
-            realm.write()
-                {
-                    if region.visits.count == 7
-                    {
-                        region.visits.delete(region.visits.first)
-                    }
-                    
-                    let currentVisit = Visit()
-                    currentVisit.duration = region.time
-                    region.visits.append(currentVisit)
-                    region.time = 0
-            }
-        }
-        }
-    }
-    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -135,10 +65,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
+        
+        HomeViewController().viewDidAppear(true)
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
+        
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
     

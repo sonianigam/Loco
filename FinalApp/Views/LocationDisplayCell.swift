@@ -13,7 +13,11 @@ class LocationDisplayCell: UITableViewCell
 {
     @IBOutlet weak var dailyDate: UILabel!
     @IBOutlet weak var dailyDuration: UILabel!
+    @IBOutlet weak var dailyEntryTime: UILabel!
+    
     var dateformatter = NSDateFormatter()
+    var dateformatterTwo = NSDateFormatter()
+
 
 
     override func awakeFromNib() {
@@ -26,6 +30,12 @@ class LocationDisplayCell: UITableViewCell
         dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         self.dailyDate.text = dateformatter.stringFromDate(dailyData.date)
         
+    }
+    
+    func configureCellWithTimeStamp(dailyData: Visit)
+    {
+        dateformatterTwo.timeStyle = NSDateFormatterStyle.MediumStyle
+        self.dailyEntryTime.text = dateformatterTwo.stringFromDate(dailyData.date)
     }
     
     func configureCellWithTime (dailyData: Visit)

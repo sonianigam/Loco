@@ -32,10 +32,16 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
+        viewDidAppear(true)
+        println(keyLocations)
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        println("view did appear")
         let realm = Realm()
         keyLocations = realm.objects(KeyLocation)
         tableView.reloadData()
-        println(keyLocations)
         
     }
         
@@ -55,13 +61,24 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
             locationDisplayViewController.homeViewController = self
         }
         
+        if segue.identifier == "segueToNewLocation" {
+            if keyLocations.count == 20
+            {
+                let alertController = UIAlertController(
+                    title: "Oops!",
+                    message: "You can only track 20 regions at a time",
+                    preferredStyle: .Alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                alertController.view.tintColor = StyleConstants.defaultColor
+                presentViewController(alertController, animated: true, completion: nil)
+            }
+            
+        }
+        
     }
-    
-// MARK: ********************************************************************************************************
-
-    
 }
 
+// MARK: ********************************************************************************************************
 
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {

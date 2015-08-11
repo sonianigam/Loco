@@ -97,29 +97,6 @@ class NewLocationViewController: UITableViewController {
     }
     
     
-    
-    // LETS NOT FORGET ABOUT THIS!!!!!!!  *********************************
-    
-    
-    //            homeViewController!.startMonitoringTrackedRegion(setLocation)
-    
-    //            let aBool = global.setItem.placemark.coordinate as CLLocationCoordinate2D == sharedLocation.currentLocation.coordinate as CLLocationCoordinate2D
-    //            if aBool {
-    //                let currentRegion = homeViewController!.setTrackedRegion(setLocation)
-    //                homeViewController!.handleRegionEntranceEvent(currentRegion)
-    //            }
-    
-    
-    //    func updateSearchResultsForSearchController(searchController: UISearchController){
-    //
-    //    }
-    
-    
-    //        func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-    //            mapView.showsUserLocation = status == .AuthorizedAlways
-    //
-    //        }
-    
     func checkForLocationAuth() -> Bool{
         if CLLocationManager.authorizationStatus() == .Denied {
             sharedLocation.locationManager.requestAlwaysAuthorization()

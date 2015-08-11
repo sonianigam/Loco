@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Foundation
 
 class LocationDisplayViewController: UIViewController {
     
@@ -18,8 +19,10 @@ class LocationDisplayViewController: UIViewController {
     @IBOutlet weak var locationNotesTextView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     var placeholderLabel = UILabel()
+    var placeholderTVLabel = UILabel()
     var keyLocationVisits = List<Visit>()
     var dateFormatter = NSDateFormatter()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +32,7 @@ class LocationDisplayViewController: UIViewController {
         keyLocationVisits = keyLocation!.visits
         tableView.separatorColor = StyleConstants.defaultColor
         tableView.dataSource = self
-
+        
         
         if locationNotesTextView.text == ""
         {
@@ -42,7 +45,7 @@ class LocationDisplayViewController: UIViewController {
             placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
             placeholderLabel.textAlignment = NSTextAlignment.Center
             placeholderLabel.center = CGPointMake(170, 17)
-           // placeholderLabel.center = locationNotesTextView.center
+            // placeholderLabel.center = locationNotesTextView.center
         }
         
         // Do any additional setup after loading the view.
@@ -65,10 +68,7 @@ class LocationDisplayViewController: UIViewController {
         return string
     }
     
-  
-    
 }
-
 
 extension LocationDisplayViewController: UITableViewDataSource
     
@@ -78,17 +78,55 @@ extension LocationDisplayViewController: UITableViewDataSource
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return keyLocation!.visits.count
+        if(keyLocation!.visits.count == 0){
+            return 1
+        }
+        else {
+            return keyLocation!.visits.count
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        let realm = Realm()
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("LocationCell") as! LocationDisplayCell
-        let row = indexPath.row
-        let dailyData = keyLocationVisits[row]
-
-        cell.configureCellWithDate(dailyData)
-        cell.configureCellWithTime(dailyData)
+        if(keyLocation!.visits.count != 0){
+            let row = indexPath.row
+            let dailyData = keyLocationVisits[row]
+            let today = NSDate()
+            
+            if dailyData.date.timeIntervalSinceDate(today) < 604800
+            {
+                cell.configureCellWithDate(dailyData)
+                cell.configureCellWithTime(dailyData)
+                cell.configureCellWithTimeStamp(dailyData)
+            }
+            else
+            {
+                realm.write()
+                    {
+                        realm.delete(dailyData)
+                }
+            }
+        
+            placeholderTVLabel.text = ""
+        }
+        else {
+            placeholderTVLabel.text = "here you will find a weekly view!"
+            placeholderTVLabel.sizeToFit()
+            placeholderTVLabel.font = UIFont( name: "Helvetica Neue", size: 16)
+            tableView.addSubview(placeholderTVLabel)
+            placeholderTVLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
+            placeholderTVLabel.textColor = UIColor(white: 0, alpha: 0.22)
+            placeholderTVLabel.textAlignment = NSTextAlignment.Center
+            placeholderTVLabel.center = CGPointMake(180, 50)
+            
+            cell.dailyDate.text = ""
+            cell.dailyDuration.text = ""
+            
+        }
+        
         return cell
         
     }
