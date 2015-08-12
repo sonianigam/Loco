@@ -56,7 +56,7 @@
                             <outlet property="delegate" destination="J6B-e6-L78" id="MfZ-Ci-3kL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="24 hour summary" id="ZMA-SH-meK" userLabel="Home" propertyAccessControl="none">
+                    <navigationItem key="navigationItem" title="your last 24 hours" id="ZMA-SH-meK" userLabel="Home" propertyAccessControl="none">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="dXR-C0-0PI">
                             <connections>
                                 <segue destination="B7Y-Wn-3Eg" kind="show" identifier="segueToNewLocation" id="WSf-ll-9gx"/>
@@ -231,10 +231,10 @@
         <scene sceneID="1Ng-md-EQj">
             <objects>
                 <tableViewController id="B7Y-Wn-3Eg" customClass="NewLocationViewController" customModule="FinalApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="199" sectionHeaderHeight="22" sectionFooterHeight="22" id="wQj-9P-NhP">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="wQj-9P-NhP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="ick-FS-ZJI">
                             <rect key="frame" x="0.0" y="103" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -286,8 +286,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Wz-rT-XnT" id="0U0-o2-6QL">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
-                                                    <rect key="frame" x="8" y="3" width="576" height="98.5"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
+                                                    <rect key="frame" x="8" y="0.0" width="576" height="98.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" red="0.58039215690000001" green="0.0" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="textColor" red="0.58431372549019611" green="0.0" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
@@ -312,7 +312,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="save" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xad-s9-Ykt">
-                                                    <rect key="frame" x="255" y="27" width="90" height="90"/>
+                                                    <rect key="frame" x="255" y="30" width="90" height="90"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="90" id="6Y4-Da-gst"/>
                                                         <constraint firstAttribute="width" constant="90" id="Uxb-5i-e9u"/>
@@ -330,7 +330,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="Xad-s9-Ykt" secondAttribute="centerX" id="8qS-Ts-kZi"/>
-                                                <constraint firstItem="Xad-s9-Ykt" firstAttribute="top" secondItem="cOS-kw-d3R" secondAttribute="topMargin" constant="19" id="8yS-Xf-lmq"/>
+                                                <constraint firstItem="Xad-s9-Ykt" firstAttribute="top" secondItem="cOS-kw-d3R" secondAttribute="topMargin" constant="22" id="8yS-Xf-lmq"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
