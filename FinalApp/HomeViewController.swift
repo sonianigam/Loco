@@ -33,9 +33,8 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
-        viewDidAppear(true)
         println(keyLocations)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshKeyLocations", name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     
     func descending(d1: KeyLocation, d2: KeyLocation) -> Bool{
@@ -45,12 +44,15 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     
     override func viewDidAppear(animated: Bool) {
         println("view did appear")
+        refreshKeyLocations()
+    }
+    
+    func refreshKeyLocations() {
         let realm = Realm()
         keyLocations = realm.objects(KeyLocation)
         tableView.reloadData()
-        
     }
-        
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         //Dispose of any resources that can be recreated.

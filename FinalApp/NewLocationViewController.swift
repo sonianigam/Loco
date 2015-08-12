@@ -178,7 +178,7 @@ class NewLocationViewController: UITableViewController {
     
     func addLabelForTextViewPlaceholderText() {
         placeholderLabel = UILabel()
-        placeholderLabel.text = " enter additional notes about your location"
+        placeholderLabel.text = "enter additional notes or goals"
         placeholderLabel.sizeToFit()
         placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
         textView.addSubview(placeholderLabel)

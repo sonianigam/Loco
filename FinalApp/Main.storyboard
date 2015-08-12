@@ -108,7 +108,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="74" id="kMe-9K-sXT"/>
                                 </constraints>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -258,8 +258,8 @@
                                                         <outlet property="delegate" destination="B7Y-Wn-3Eg" id="Jud-tw-pCa"/>
                                                     </connections>
                                                 </mapView>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="give your location a name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uNl-KG-RNb">
-                                                    <rect key="frame" x="16" y="262" width="584" height="22.5"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="give your location a name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uNl-KG-RNb">
+                                                    <rect key="frame" x="12" y="262" width="572" height="22.5"/>
                                                     <color key="tintColor" red="0.58039215686274515" green="0.0" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="textColor" red="0.58431372549019611" green="0.0" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -270,9 +270,13 @@
                                                 </textField>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="uNl-KG-RNb" firstAttribute="leading" secondItem="bOM-O1-Ob5" secondAttribute="leadingMargin" constant="4" id="IRR-8Z-XZR"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="uNl-KG-RNb" secondAttribute="trailing" constant="8" id="Pju-aY-mYZ"/>
+                                                <constraint firstItem="uNl-KG-RNb" firstAttribute="top" secondItem="ZRl-Ci-vwB" secondAttribute="bottom" constant="11" id="Vtk-ny-l30"/>
                                                 <constraint firstItem="ZRl-Ci-vwB" firstAttribute="leading" secondItem="bOM-O1-Ob5" secondAttribute="leadingMargin" constant="-35" id="cEb-Mu-jsc"/>
                                                 <constraint firstItem="ZRl-Ci-vwB" firstAttribute="top" secondItem="bOM-O1-Ob5" secondAttribute="top" id="cVm-So-vR5"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ZRl-Ci-vwB" secondAttribute="trailing" constant="-51" id="rdW-ZE-Uru"/>
+                                                <constraint firstItem="uNl-KG-RNb" firstAttribute="bottom" secondItem="bOM-O1-Ob5" secondAttribute="bottomMargin" id="xxJ-Vj-2Ze"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="tintColor" red="0.58039215690000001" green="0.0" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -282,8 +286,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Wz-rT-XnT" id="0U0-o2-6QL">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
-                                                    <rect key="frame" x="8" y="0.0" width="592" height="88"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
+                                                    <rect key="frame" x="8" y="3" width="576" height="98.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" red="0.58039215690000001" green="0.0" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="textColor" red="0.58431372549019611" green="0.0" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
@@ -294,21 +298,28 @@
                                                     </connections>
                                                 </textView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="R47-Lf-SV7" firstAttribute="leading" secondItem="0U0-o2-6QL" secondAttribute="leadingMargin" id="B3J-wt-NPp"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="R47-Lf-SV7" secondAttribute="bottom" constant="8" id="D9J-HE-aUw"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="R47-Lf-SV7" secondAttribute="trailing" constant="8" id="Ocl-2O-nNU"/>
+                                                <constraint firstItem="R47-Lf-SV7" firstAttribute="top" secondItem="0U0-o2-6QL" secondAttribute="topMargin" constant="-5" id="UCm-9W-4bA"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="199" id="mFX-PU-iOs">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="150" id="mFX-PU-iOs">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mFX-PU-iOs" id="cOS-kw-d3R">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="save" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xad-s9-Ykt">
-                                                    <rect key="frame" x="227" y="29" width="146" height="54"/>
+                                                    <rect key="frame" x="255" y="27" width="90" height="90"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="146" id="B2q-ZL-WwF"/>
-                                                        <constraint firstAttribute="height" constant="54" id="Vl0-w7-wsf"/>
+                                                        <constraint firstAttribute="height" constant="90" id="6Y4-Da-gst"/>
+                                                        <constraint firstAttribute="width" constant="90" id="Uxb-5i-e9u"/>
                                                     </constraints>
                                                     <color key="tintColor" red="0.62787435960000004" green="0.0" blue="0.94988812759999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <state key="normal" backgroundImage="add">
+                                                    <size key="titleShadowOffset" width="7" height="0.0"/>
+                                                    <state key="normal" backgroundImage="addButton">
                                                         <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="titleShadowColor" red="0.58039215690000001" green="0.0" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -318,8 +329,8 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Xad-s9-Ykt" firstAttribute="centerX" secondItem="cOS-kw-d3R" secondAttribute="centerX" id="e7N-GN-vqD"/>
-                                                <constraint firstItem="Xad-s9-Ykt" firstAttribute="top" secondItem="cOS-kw-d3R" secondAttribute="topMargin" constant="21" id="ms3-MM-uT1"/>
+                                                <constraint firstAttribute="centerX" secondItem="Xad-s9-Ykt" secondAttribute="centerX" id="8qS-Ts-kZi"/>
+                                                <constraint firstItem="Xad-s9-Ykt" firstAttribute="top" secondItem="cOS-kw-d3R" secondAttribute="topMargin" constant="19" id="8yS-Xf-lmq"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -360,6 +371,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add" width="199" height="72"/>
+        <image name="addButton" width="129" height="129"/>
     </resources>
 </document>

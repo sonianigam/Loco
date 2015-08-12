@@ -113,13 +113,13 @@ extension LocationDisplayViewController: UITableViewDataSource
             placeholderTVLabel.text = ""
         }
         else {
-            placeholderTVLabel.text = "no visits for this location yet!"
+            placeholderTVLabel.text = "you haven't visited this location, yet!"
             placeholderTVLabel.sizeToFit()
             placeholderTVLabel.font = UIFont( name: "Helvetica Neue", size: 16)
             tableView.addSubview(placeholderTVLabel)
             placeholderTVLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
             placeholderTVLabel.textColor = UIColor(white: 0, alpha: 0.22)
-            var size = UIScreen.mainScreen().bounds.size.width/1.96
+            var size = UIScreen.mainScreen().bounds.size.width/1.93
             placeholderTVLabel.center = CGPointMake(size, 50)
             cell.dailyDate.text = ""
             cell.dailyDuration.text = ""
