@@ -286,8 +286,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Wz-rT-XnT" id="0U0-o2-6QL">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
-                                                    <rect key="frame" x="8" y="0.0" width="576" height="98.5"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="R47-Lf-SV7">
+                                                    <rect key="frame" x="8" y="3" width="576" height="98.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" red="0.58039215690000001" green="0.0" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="textColor" red="0.58431372549019611" green="0.0" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
