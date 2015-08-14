@@ -28,14 +28,7 @@ class HomeTableCellTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-//    var keyLocation: KeyLocation? {
-//        didSet {
-//            if let keyLocation = keyLocation, locationTitle = locationTitle {
-//                self.locationTitle.text = keyLocation.locationTitle
-//            }
-//        }
-//    }
-    
+
     func configureCellWithKeyLocation(aKeyLocation: KeyLocation) {
         self.locationTitle.text = aKeyLocation.locationTitle
         
@@ -44,11 +37,11 @@ class HomeTableCellTableViewCell: UITableViewCell {
     func configureCellWithTime (aKeyLocation: KeyLocation)
     {
         let realm = Realm()
-        var today = NSDate()
         totalDailyDuration = 0
+        
         for aVisit in aKeyLocation.visits
         {
-            if aVisit.date.timeIntervalSinceDate(today) < 86400
+            if aVisit.date.timeIntervalSinceNow > -86400
             {
                 totalDailyDuration += aVisit.duration
             }
@@ -58,9 +51,8 @@ class HomeTableCellTableViewCell: UITableViewCell {
             {
                 aKeyLocation.time = self.totalDailyDuration
         }
-        
-        
-        self.timeStamp.text = printSecondsToHoursMinutesSeconds(aKeyLocation.time)
+    
+        self.timeStamp.text = printSecondsToHoursMinutesSeconds(totalDailyDuration)
 
     }
     

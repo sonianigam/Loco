@@ -21,6 +21,7 @@ class LocationDisplayViewController: UIViewController {
     var placeholderLabel = UILabel()
     var placeholderTVLabel = UILabel()
     var keyLocationVisits = List<Visit>()
+    //var keyLocationVisits = NSArray[Visit]
     var dateFormatter = NSDateFormatter()
     var totalTime = Double()
     
@@ -36,7 +37,9 @@ class LocationDisplayViewController: UIViewController {
         locationTimeLabel.text = "total: \(printSecondsToHoursMinutesSeconds(totalTime))"
         locationNameLabel.text = keyLocation!.locationTitle
         locationNotesTextView.text = keyLocation!.notes
-        keyLocationVisits = keyLocation!.visits
+        //keyLocationVisits = reverse(self.keyLocation!.visits)
+      // keyLocationVisits = keyLocationVisits.sorted("date", ascending: true)
+        keyLocationVisits = self.keyLocation!.visits
         tableView.separatorColor = StyleConstants.defaultColor
         tableView.dataSource = self
         
@@ -101,6 +104,7 @@ extension LocationDisplayViewController: UITableViewDataSource
         let cell = tableView.dequeueReusableCellWithIdentifier("LocationCell") as! LocationDisplayCell
         if(keyLocation!.visits.count != 0){
             let row = indexPath.row
+            
             let dailyData = keyLocationVisits[row]
             let today = NSDate()
             

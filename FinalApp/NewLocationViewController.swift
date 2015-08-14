@@ -125,7 +125,7 @@ class NewLocationViewController: UITableViewController {
     func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
         println("this is the KeyLocation coming in ---> \(trackedRegion)")
         var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(150.0)
+        var radius = CLLocationDistance(50.0)
         var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
         region.notifyOnEntry = true
         region.notifyOnExit = true
@@ -186,6 +186,12 @@ class NewLocationViewController: UITableViewController {
         placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
     }
     
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    
+        textView.resignFirstResponder()
+    
+    }
+    
     
 }
 
@@ -230,6 +236,14 @@ extension NewLocationViewController: UITextFieldDelegate {
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         userGeneratedName.resignFirstResponder()
         return true;
+    }
+    
+}
+
+extension NewLocationViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        tableView.resignFirstResponder()
     }
     
 }

@@ -18,13 +18,15 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     @IBOutlet weak var addButton: UIBarButtonItem!
     let locationManager = LocationManager.sharedLocationManager.locationManager
     var segueLocation: KeyLocation?
+    var realm = Realm()
+
     var keyLocations: Results<KeyLocation>! {
         didSet {
             // Whenever keyLocations update, update the table view
             tableView?.reloadData()
         }
     }
-    var newLocations = [KeyLocation]()
+    
     
     override func viewDidLoad() {
         
@@ -33,7 +35,7 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
-        println(keyLocations)
+        //println(keyLocations)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshKeyLocations", name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     
@@ -49,7 +51,7 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     
     func refreshKeyLocations() {
         let realm = Realm()
-        keyLocations = realm.objects(KeyLocation)
+        keyLocations = self.realm.objects(KeyLocation).sorted("time", ascending: false)
         tableView.reloadData()
     }
     
@@ -64,7 +66,6 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     
         if segue.identifier == "segueToLocationDisplay" {
             let locationDisplayViewController: LocationDisplayViewController = segue.destinationViewController as! LocationDisplayViewController
-            println(locationDisplayViewController)
             locationDisplayViewController.keyLocation = segueLocation
             locationDisplayViewController.homeViewController = self
         }
