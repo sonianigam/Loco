@@ -99,6 +99,15 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let keyLocation = keyLocations[row]
         cell.configureCellWithKeyLocation(keyLocation)
         cell.configureCellWithTime(keyLocation)
+        
+        if keyLocations[row].inside == true {
+            cell.backgroundColor = UIColor(rgb: 0xE4D3EE)
+            println("color")
+        }
+        else
+        {
+            cell.backgroundColor = nil
+        }
         return cell
         
     }
@@ -141,6 +150,17 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
         
 }
+
+//extension UIColor {
+//    convenience init(rgb: UInt) {
+//        self.init(
+//            red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
+//            green: CGFloat((rgb & 0x00FF00) >> 8) / 255.0,
+//            blue: CGFloat(rgb & 0x0000FF) / 255.0,
+//            alpha: CGFloat(1.0)
+//        )
+//    }
+//}
 
 
 

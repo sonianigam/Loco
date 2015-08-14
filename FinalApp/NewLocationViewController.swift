@@ -144,9 +144,7 @@ class NewLocationViewController: UITableViewController {
             sharedLocation.locationManager(locationManager, didEnterRegion: region)
             
         }
-        
-        //locationManager.startMonitoringForRegion(region)
-        
+                
     }
     
     

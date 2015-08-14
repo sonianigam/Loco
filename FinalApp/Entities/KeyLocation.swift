@@ -21,5 +21,6 @@ class KeyLocation: Object {
     dynamic var locationTitle : String = ""
     dynamic var time: Double = 0
     dynamic var visits = List<Visit>()
+    dynamic var inside: Bool = false
 
 }

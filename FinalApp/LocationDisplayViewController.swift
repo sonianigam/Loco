@@ -20,8 +20,6 @@ class LocationDisplayViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var placeholderLabel = UILabel()
     var placeholderTVLabel = UILabel()
-    var keyLocationVisits = List<Visit>()
-    //var keyLocationVisits = NSArray[Visit]
     var dateFormatter = NSDateFormatter()
     var totalTime = Double()
     
@@ -37,12 +35,8 @@ class LocationDisplayViewController: UIViewController {
         locationTimeLabel.text = "total: \(printSecondsToHoursMinutesSeconds(totalTime))"
         locationNameLabel.text = keyLocation!.locationTitle
         locationNotesTextView.text = keyLocation!.notes
-        //keyLocationVisits = reverse(self.keyLocation!.visits)
-      // keyLocationVisits = keyLocationVisits.sorted("date", ascending: true)
-        keyLocationVisits = self.keyLocation!.visits
         tableView.separatorColor = StyleConstants.defaultColor
         tableView.dataSource = self
-        
         
         if locationNotesTextView.text == ""
         {
@@ -89,12 +83,7 @@ extension LocationDisplayViewController: UITableViewDataSource
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(keyLocation!.visits.count == 0){
-            return 1
-        }
-        else {
-            return keyLocation!.visits.count
-        }
+        return keyLocation!.visits.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -105,12 +94,12 @@ extension LocationDisplayViewController: UITableViewDataSource
         if(keyLocation!.visits.count != 0){
             let row = indexPath.row
             
-            let dailyData = keyLocationVisits[row]
+            let dailyData = keyLocation?.visits.sorted("date", ascending: false)[indexPath.row]
             let today = NSDate()
             
-                cell.configureCellWithDate(dailyData)
-                cell.configureCellWithTime(dailyData)
-                cell.configureCellWithTimeStamp(dailyData)
+                cell.configureCellWithDate(dailyData!)
+                cell.configureCellWithTime(dailyData!)
+                cell.configureCellWithTimeStamp(dailyData!)
 
 
         

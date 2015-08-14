@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
 
-        
         // Override point for customization after application launch.
         
         UINavigationBar.appearance().barTintColor = StyleConstants.defaultColor
