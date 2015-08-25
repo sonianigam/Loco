@@ -229,7 +229,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             realm.write() {
                 realm.delete(keyLocation)
             }
-            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
             tableView.reloadData()
             
         }

@@ -73,6 +73,7 @@ class LocationDisplayViewController: UIViewController {
         return string
     }
     
+    
 }
 
 extension LocationDisplayViewController: UITableViewDataSource
@@ -122,6 +123,22 @@ extension LocationDisplayViewController: UITableViewDataSource
         
         return cell
         
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
+    {
+        
+        if (editingStyle == .Delete) {
+            let visit = keyLocation!.visits[indexPath.row]
+            let realm = Realm()
+            realm.write() {
+                realm.delete(visit)
+            }
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.reloadData()
+            
+        }
     }
     
     
