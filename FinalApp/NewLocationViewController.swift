@@ -125,7 +125,7 @@ class NewLocationViewController: UITableViewController {
     func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
         println("this is the KeyLocation coming in ---> \(trackedRegion)")
         var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(50.0)
+        var radius = CLLocationDistance(10.0)
         var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
         region.notifyOnEntry = true
         region.notifyOnExit = true
