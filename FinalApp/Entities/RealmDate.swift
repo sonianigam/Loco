@@ -10,7 +10,6 @@ import Foundation
 import RealmSwift
 
 
-class RealmDate: Object
-{
+class RealmDate: Object {
     var realmDate = NSDate()
 }

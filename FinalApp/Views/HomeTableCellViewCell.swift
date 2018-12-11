@@ -22,7 +22,7 @@ class HomeTableCellTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -36,7 +36,7 @@ class HomeTableCellTableViewCell: UITableViewCell {
     
     func configureCellWithTime (aKeyLocation: KeyLocation)
     {
-        let realm = Realm()
+        let realm = try! Realm()
         totalDailyDuration = 0
         
         for aVisit in aKeyLocation.visits
@@ -47,12 +47,12 @@ class HomeTableCellTableViewCell: UITableViewCell {
             }
         }
     
-        realm.write()
+        try! realm.write()
             {
                 aKeyLocation.time = self.totalDailyDuration
         }
     
-        self.timeStamp.text = printSecondsToHoursMinutesSeconds(totalDailyDuration)
+        self.timeStamp.text = printSecondsToHoursMinutesSeconds(seconds: totalDailyDuration)
 
     }
     
@@ -63,7 +63,7 @@ class HomeTableCellTableViewCell: UITableViewCell {
     }
     
     func printSecondsToHoursMinutesSeconds (seconds:Double) -> String {
-        let (h, m, s) = secondsToHoursMinutesSeconds (seconds)
+        let (h, m, s) = secondsToHoursMinutesSeconds (seconds: seconds)
         let string: String = "\(Int(round(h))) hr. \(Int(round(m))) min. \(Int(round(s))) sec."
         return string
     }

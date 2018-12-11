@@ -13,12 +13,12 @@ import MapKit
 import RealmSwift
 
 
-class HomeViewController: UITableViewController, CLLocationManagerDelegate{
+class HomeViewController: UITableViewController {
     
     @IBOutlet weak var addButton: UIBarButtonItem!
     let locationManager = LocationManager.sharedLocationManager.locationManager
     var segueLocation: KeyLocation?
-    var realm = Realm()
+    var realm = try! Realm()
     
     var keyLocations: Results<KeyLocation>! {
         didSet {
@@ -36,7 +36,7 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
         //println(keyLocations)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshKeyLocations", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: "refreshKeyLocations", name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
     
     func descending(d1: KeyLocation, d2: KeyLocation) -> Bool{
@@ -44,15 +44,14 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
     }
     
     
-    override func viewDidAppear(animated: Bool) {
-        println("view did appear")
+    override func viewDidAppear(_ animated: Bool) {
         refreshKeyLocations()
     }
     
     func refreshKeyLocations() {
-        let realm = Realm()
+        let realm = try! Realm()
         
-        keyLocations = self.realm.objects(KeyLocation).sorted("time", ascending: false)
+        keyLocations = self.realm.objects(KeyLocation).sorted(byKeyPath: "time", ascending: false)
         
         //LOADING UP DATA FOR DEMO DAY *********************************************************************************
         
@@ -151,24 +150,18 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
 //            }
 //        }
         
-        keyLocations = self.realm.objects(KeyLocation).sorted("time", ascending: false)
+        keyLocations = self.realm.objects(KeyLocation.self).sorted(byKeyPath: "time", ascending: false)
         
         
         
         tableView.reloadData()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        //Dispose of any resources that can be recreated.
-    }
-    
     // MARK: segue
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToLocationDisplay" {
-            let locationDisplayViewController: LocationDisplayViewController = segue.destinationViewController as! LocationDisplayViewController
+            let locationDisplayViewController: LocationDisplayViewController = segue.destination as! LocationDisplayViewController
             locationDisplayViewController.keyLocation = segueLocation
             locationDisplayViewController.homeViewController = self
         }
@@ -179,10 +172,10 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
                 let alertController = UIAlertController(
                     title: "Oops!",
                     message: "You can only track 20 regions at a time",
-                    preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 alertController.view.tintColor = StyleConstants.defaultColor
-                presentViewController(alertController, animated: true, completion: nil)
+                present(alertController, animated: true, completion: nil)
             }
             
         }
@@ -193,16 +186,16 @@ class HomeViewController: UITableViewController, CLLocationManagerDelegate{
 // MARK: ********************************************************************************************************
 
 
-extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
+extension HomeViewController {
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("HomeTableCell", forIndexPath: indexPath) as! HomeTableCellTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableCell", for: indexPath as IndexPath) as! HomeTableCellTableViewCell
         let row = indexPath.row
         let keyLocation = keyLocations[row]
         
-        cell.configureCellWithKeyLocation(keyLocation)
-        cell.configureCellWithTime(keyLocation)
+        cell.configureCellWithKeyLocation(aKeyLocation: keyLocation)
+        cell.configureCellWithTime(aKeyLocation: keyLocation)
         
         if keyLocations[row].inside == true {
             cell.backgroundColor = UIColor(rgb: 0xF6E5FF)
@@ -215,29 +208,28 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Int(keyLocations?.count ?? 0)
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if (editingStyle == .Delete) {
+        if (editingStyle == .delete) {
             let keyLocation = keyLocations[indexPath.row]
-            stopMonitoringTrackedRegion(keyLocation)
-            let realm = Realm()
-            realm.write() {
+            stopMonitoringTrackedRegion(trackedRegion: keyLocation)
+            let realm = try! Realm()
+            try! realm.write() {
                 realm.delete(keyLocation)
             }
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             tableView.reloadData()
             
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         segueLocation = keyLocations[indexPath.row]
-        self.performSegueWithIdentifier("segueToLocationDisplay", sender: nil)
+        self.performSegue(withIdentifier: "segueToLocationDisplay", sender: nil)
     }
     
     //MARK: Tracking ************************************************************************************
@@ -248,7 +240,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         for region in locationManager.monitoredRegions {
             if let circularRegion = region as? CLCircularRegion {
                 if circularRegion.identifier == trackedRegion.locationTitle {
-                    locationManager.stopMonitoringForRegion(circularRegion)}}
+                    locationManager.stopMonitoring(for: circularRegion)}}
         }
     }
     

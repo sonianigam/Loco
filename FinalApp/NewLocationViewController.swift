@@ -40,14 +40,13 @@ class NewLocationViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.mapView.setUserTrackingMode(.Follow, animated: true)
+        self.mapView.setUserTrackingMode(.follow, animated: true)
         self.tableView.separatorColor = StyleConstants.defaultColor
         addLabelForTextViewPlaceholderText()
         setupSearchController()
         
         sharedLocation.getUserLocationWithClosure { (aLocation, error) -> Void in
             if (error != nil) {
-                println("there was an error updating current location")
                 return
             }
             // ponder this: when this VC opens the user's current location is set, but if they move the current location will not be updated.
@@ -73,44 +72,44 @@ class NewLocationViewController: UITableViewController {
             let alertController = UIAlertController(
                 title: "Oops!",
                 message: "Please enter your location's name",
-                preferredStyle: .Alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             alertController.view.tintColor = StyleConstants.defaultColor
-            presentViewController(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
         } else {
-            var realm = Realm()
-            setLocation.locationTitle = userGeneratedName.text
+            var realm = try! Realm()
+            setLocation.locationTitle = userGeneratedName.text!
             setLocation.notes = textView.text
             setLocation.longitude = global.setItem.placemark.coordinate.longitude
             setLocation.latitude = global.setItem.placemark.coordinate.latitude
             setLocation.address = "\(global.setItem.placemark.subThoroughfare) \(global.setItem.placemark.thoroughfare), \(global.setItem.placemark.locality), \(global.setItem.placemark.postalCode), \(global.setItem.placemark.administrativeArea)"
             setLocation.time = 0
-            realm.write() {
+            try! realm.write() {
                 realm.add(self.setLocation)
             }
             
-            startMonitoringTrackedRegion(setLocation)
-            self.navigationController?.popToRootViewControllerAnimated(true)
+            startMonitoringTrackedRegion(trackedRegion: setLocation)
+            self.navigationController?.popToRootViewController(animated: true)
         }
         
     }
     
     
     func checkForLocationAuth() -> Bool{
-        if CLLocationManager.authorizationStatus() == .Denied {
+        if CLLocationManager.authorizationStatus() == .denied {
             sharedLocation.locationManager.requestAlwaysAuthorization()
             let alertController = UIAlertController(
                 title: "Background Location Access Disabled",
                 message: "In order to track locations, please open settings and set Loco's location access to 'Always'.",
-                preferredStyle: .Alert)
-            let openAction = UIAlertAction(title: "Open Settings", style: .Default) { (action) in
+                preferredStyle: .alert)
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
                 if let url = NSURL(string:UIApplicationOpenSettingsURLString) {
-                    UIApplication.sharedApplication().openURL(url)
+                    UIApplication.shared.openURL(url as URL)
                 }
             }
             
             alertController.addAction(openAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
             return false
         } else {
             return true
@@ -123,10 +122,10 @@ class NewLocationViewController: UITableViewController {
     //MARK: initiate tracking **************************************************************************************
     
     func setTrackedRegion(trackedRegion: KeyLocation) -> CLCircularRegion {
-        println("this is the KeyLocation coming in ---> \(trackedRegion)")
-        var center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
-        var radius = CLLocationDistance(10.0)
-        var region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
+        print("this is the KeyLocation coming in ---> \(trackedRegion)")
+        let center = CLLocationCoordinate2D(latitude: trackedRegion.latitude, longitude: trackedRegion.longitude)
+        let radius = CLLocationDistance(10.0)
+        let region = CLCircularRegion(center: center, radius: radius, identifier: trackedRegion.locationTitle)
         region.notifyOnEntry = true
         region.notifyOnExit = true
         return region
@@ -134,15 +133,14 @@ class NewLocationViewController: UITableViewController {
     
     func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
     {
-        var region = setTrackedRegion(trackedRegion)
-        println("inside this region")
+        var region = setTrackedRegion(trackedRegion: trackedRegion)
+        print("inside this region")
        // locationManager.requestStateForRegion(region)
-        locationManager.startMonitoringForRegion(region)
+        locationManager.startMonitoring(for: region)
 
-        if region.containsCoordinate(self.sharedLocation.currentLocation.coordinate)
+        if region.contains(self.sharedLocation.currentLocation.coordinate)
         {
             sharedLocation.locationManager(locationManager, didEnterRegion: region)
-            
         }
                 
     }
@@ -155,22 +153,22 @@ class NewLocationViewController: UITableViewController {
         searchTableViewController.tableView.delegate = searchTableViewController
         searchTableViewController.tableView.dataSource = searchTableViewController
         searchTableViewController.newLocationViewController = self
-        searchTableViewController.tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "searchCell")
+        searchTableViewController.tableView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "searchCell")
         searchController = UISearchController(searchResultsController: searchTableViewController)
         searchController.searchResultsUpdater = searchTableViewController
         searchController.delegate = searchTableViewController
         searchController.searchBar.sizeToFit()
         definesPresentationContext = true
         searchController.searchBar.placeholder = "change location"
-        searchController.searchBar.tintColor = UIColor.whiteColor()
+        searchController.searchBar.tintColor = UIColor.white
         searchController.searchBar.barTintColor = StyleConstants.defaultColor
-        searchController.searchBar.returnKeyType = UIReturnKeyType.Search
+        searchController.searchBar.returnKeyType = UIReturnKeyType.search
         searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.showsCancelButton = false
         self.tableView.tableHeaderView = searchController.searchBar
         self.tableView.tintColor = StyleConstants.defaultColor
         
-        var textFieldInsideSearchBar = searchController.searchBar.valueForKey("searchField") as? UITextField
+        var textFieldInsideSearchBar = searchController.searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = StyleConstants.defaultColor
     }
     
@@ -180,34 +178,31 @@ class NewLocationViewController: UITableViewController {
         placeholderLabel.sizeToFit()
         placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
         textView.addSubview(placeholderLabel)
-        placeholderLabel.frame.origin = CGPointMake(5, textView.font.pointSize / 2)
+        placeholderLabel.frame.origin = CGPoint.init(x: 5, y: textView.font!.pointSize / 2)
+
         placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         textView.resignFirstResponder()
-    
     }
-    
-    
 }
 
 extension NewLocationViewController: MKMapViewDelegate {
     
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(_ mapView: MKMapView!, viewFor annotation: MKAnnotation!) -> MKAnnotationView! {
         
         if annotation is MKUserLocation {
             return nil
         }
         
         let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             pinView!.animatesDrop = true
-            pinView!.pinColor = .Purple
+            pinView!.pinColor = .purple
         }
         else {
             pinView!.annotation = annotation
@@ -220,35 +215,23 @@ extension NewLocationViewController: MKMapViewDelegate {
 
 
 extension NewLocationViewController: UITextViewDelegate {
-    
-    func textViewDidChange(textView: UITextView) {
-        placeholderLabel.hidden = count(textView.text) != 0
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = textView.text.count != 0
         textView.textColor = StyleConstants.defaultColor
         textView.font = UIFont(name: "Helvetica Neue", size: 16)
     }
-    
 }
 
 extension NewLocationViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         userGeneratedName.resignFirstResponder()
         return true;
     }
-    
 }
 
-extension NewLocationViewController: UITableViewDataSource, UITableViewDelegate {
+extension NewLocationViewController {
     
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         tableView.resignFirstResponder()
     }
-    
 }
-
-
-
-
-
-
-

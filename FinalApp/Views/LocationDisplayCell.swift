@@ -15,8 +15,8 @@ class LocationDisplayCell: UITableViewCell
     @IBOutlet weak var dailyDuration: UILabel!
     @IBOutlet weak var dailyEntryTime: UILabel!
     
-    var dateformatter = NSDateFormatter()
-    var dateformatterTwo = NSDateFormatter()
+    var dateformatter = DateFormatter()
+    var dateformatterTwo = DateFormatter()
 
 
 
@@ -25,23 +25,19 @@ class LocationDisplayCell: UITableViewCell
         // Initialization code
     }
     
-    
     func configureCellWithDate(dailyData: Visit) {
-        dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        self.dailyDate.text = dateformatter.stringFromDate(dailyData.date)
+        dateformatter.dateStyle = DateFormatter.Style.medium
+        self.dailyDate.text = dateformatter.string(from: dailyData.date as Date)
         
     }
     
-    func configureCellWithTimeStamp(dailyData: Visit)
-    {
-        dateformatterTwo.timeStyle = NSDateFormatterStyle.MediumStyle
-        self.dailyEntryTime.text = dateformatterTwo.stringFromDate(dailyData.date)
+    func configureCellWithTimeStamp(dailyData: Visit) {
+        dateformatterTwo.timeStyle = DateFormatter.Style.medium
+        self.dailyEntryTime.text = dateformatterTwo.string(from: dailyData.date as Date)
     }
     
-    func configureCellWithTime (dailyData: Visit)
-    {
-        self.dailyDuration.text = printSecondsToHoursMinutesSeconds(dailyData.duration)
-        
+    func configureCellWithTime (dailyData: Visit) {
+        self.dailyDuration.text = printSecondsToHoursMinutesSeconds(seconds: dailyData.duration)
     }
     
     func secondsToHoursMinutesSeconds (seconds : Double) -> (Double, Double, Double) {
@@ -51,7 +47,7 @@ class LocationDisplayCell: UITableViewCell
     }
     
     func printSecondsToHoursMinutesSeconds (seconds:Double) -> String {
-        let (h, m, s) = secondsToHoursMinutesSeconds (seconds)
+        let (h, m, s) = secondsToHoursMinutesSeconds (seconds: seconds)
         let string: String = "\(Int(round(h))) hr. \(Int(round(m))) min. \(Int(round(s))) sec."
         return string
     }

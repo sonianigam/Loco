@@ -34,23 +34,22 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
     
     // MARK: - Table view data source
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
         return self.results.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("searchCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath as IndexPath) as! UITableViewCell
         let mapItem = results[indexPath.row] as! MKMapItem
         cell.textLabel?.text = "\(mapItem.placemark.subThoroughfare) \(mapItem.placemark.thoroughfare), \(mapItem.placemark.locality), \(mapItem.placemark.postalCode) \(mapItem.placemark.administrativeArea)"
-        cell.textLabel?.textColor = UIColor .grayColor()
+        cell.textLabel?.textColor = UIColor .gray
         return cell
     }
     
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mapItem = results[indexPath.row] as! MKMapItem
         global.setItem = mapItem
         
@@ -66,7 +65,7 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
         self.pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: mapItem.placemark.coordinate.latitude, longitude: mapItem.placemark.coordinate.longitude)
         self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)
         newLocationViewController?.mapView.centerCoordinate = self.pointAnnotation.coordinate
-        newLocationViewController?.mapView.addAnnotation(self.pinAnnotationView.annotation)
+        newLocationViewController?.mapView.addAnnotation(self.pinAnnotationView.annotation!)
         newLocationViewController?.searchController.searchBar.text = mapItem.name
         
         //automatic zoom into new annotation
@@ -74,8 +73,8 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
         newLocationViewController?.mapView.setRegion(zoomRegion, animated: true)
         
         //clear prior search results
-        self.results.removeAll(keepCapacity: true)
-        dismissViewControllerAnimated(true, completion: nil)
+        self.results.removeAll(keepingCapacity: true)
+        dismiss(animated: true, completion: nil)
         
     }
     
@@ -97,7 +96,7 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
 
 extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelegate, MKMapViewDelegate {
     
-    func updateSearchResultsForSearchController(searchController: UISearchController)
+    func updateSearchResults(for searchController: UISearchController)
     {
         
         let aRequest = MKLocalSearchRequest()
@@ -107,7 +106,7 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
         
         func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
             
-            if status == .AuthorizedAlways
+            if status == .authorizedAlways
             {
                 // aRequest.region = MKCoordinateRegionMakeWithDistance(homeViewController!.userLocation.coordinate, 32187, 32187)
             }
@@ -115,16 +114,13 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
         
         
         let localSearch = MKLocalSearch(request: aRequest)
-        localSearch.startWithCompletionHandler { (searchResponse, error) -> Void in
+        localSearch.start { (searchResponse, error) -> Void in
             
             if (error == nil) {
-                
-                self.results = searchResponse.mapItems
+                self.results = searchResponse?.mapItems ?? []
                 self.tableView.reloadData()
-                
             }
         }
     }
     
 }
-

@@ -20,7 +20,7 @@ class LocationDisplayViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var placeholderLabel = UILabel()
     var placeholderTVLabel = UILabel()
-    var dateFormatter = NSDateFormatter()
+    var dateFormatter = DateFormatter()
     var totalTime = Double()
     
     
@@ -32,7 +32,7 @@ class LocationDisplayViewController: UIViewController {
             totalTime += visit.duration
         }
         
-        locationTimeLabel.text = "total: \(printSecondsToHoursMinutesSeconds(totalTime))"
+        locationTimeLabel.text = "total: \(printSecondsToHoursMinutesSeconds(seconds: totalTime))"
         locationNameLabel.text = keyLocation!.locationTitle
         locationNotesTextView.text = keyLocation!.notes
         tableView.separatorColor = StyleConstants.defaultColor
@@ -44,13 +44,12 @@ class LocationDisplayViewController: UIViewController {
             placeholderLabel.text = "no saved notes about your location"
             placeholderLabel.sizeToFit()
             placeholderLabel.font = UIFont( name: "Helvetica Neue", size: 16)
-            placeholderLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
+            placeholderLabel.frame.origin = CGPoint.init(x: 5, y: locationNotesTextView.font!.pointSize / 2)
             placeholderLabel.textColor = UIColor(white: 0, alpha: 0.22)
 
-            var size = UIScreen.mainScreen().bounds.size.width/2.1
-            println("\(size)")
+            var size = UIScreen.main.bounds.size.width / 2.1
             locationNotesTextView.addSubview(placeholderLabel)
-            placeholderLabel.center = CGPointMake(size, 16)
+            placeholderLabel.center = CGPoint.init(x: size, y: 16)
         }
         
         // Do any additional setup after loading the view.
@@ -68,7 +67,7 @@ class LocationDisplayViewController: UIViewController {
     }
     
     func printSecondsToHoursMinutesSeconds (seconds:Double) -> String {
-        let (h, m, s) = secondsToHoursMinutesSeconds (seconds)
+        let (h, m, s) = secondsToHoursMinutesSeconds (seconds: seconds)
         let string: String = "\(Int(round(h))) hr. \(Int(round(m))) min. \(Int(round(s))) sec."
         return string
     }
@@ -83,27 +82,20 @@ extension LocationDisplayViewController: UITableViewDataSource
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return keyLocation!.visits.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let realm = Realm()
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("LocationCell") as! LocationDisplayCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LocationCell") as! LocationDisplayCell
         if(keyLocation!.visits.count != 0){
-            let row = indexPath.row
             
-            let dailyData = keyLocation?.visits.sorted("date", ascending: false)[indexPath.row]
-            let today = NSDate()
+            let dailyData = keyLocation?.visits.sorted(byKeyPath: "date", ascending: false)[indexPath.row]
             
-                cell.configureCellWithDate(dailyData!)
-                cell.configureCellWithTime(dailyData!)
-                cell.configureCellWithTimeStamp(dailyData!)
+            cell.configureCellWithDate(dailyData: dailyData!)
+            cell.configureCellWithTime(dailyData: dailyData!)
+            cell.configureCellWithTimeStamp(dailyData: dailyData!)
 
-
-        
             placeholderTVLabel.text = ""
         }
         else {
@@ -111,10 +103,10 @@ extension LocationDisplayViewController: UITableViewDataSource
             placeholderTVLabel.sizeToFit()
             placeholderTVLabel.font = UIFont( name: "Helvetica Neue", size: 16)
             tableView.addSubview(placeholderTVLabel)
-            placeholderTVLabel.frame.origin = CGPointMake(5, locationNotesTextView.font.pointSize / 2)
+            placeholderTVLabel.frame.origin = CGPoint.init(x: 5, y: (locationNotesTextView.font?.pointSize)! / 2)
             placeholderTVLabel.textColor = UIColor(white: 0, alpha: 0.22)
-            var size = UIScreen.mainScreen().bounds.size.width/1.93
-            placeholderTVLabel.center = CGPointMake(size, 50)
+            let size = UIScreen.main.bounds.size.width/1.93
+            placeholderTVLabel.center = CGPoint.init(x: size, y: 50)
             cell.dailyDate.text = ""
             cell.dailyDuration.text = ""
             cell.dailyEntryTime.text = ""
@@ -128,14 +120,14 @@ extension LocationDisplayViewController: UITableViewDataSource
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
     {
         
-        if (editingStyle == .Delete) {
+        if (editingStyle == .delete) {
             let visit = keyLocation!.visits[indexPath.row]
-            let realm = Realm()
-            realm.write() {
+            let realm = try! Realm()
+            try! realm.write() {
                 realm.delete(visit)
             }
             
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             tableView.reloadData()
             
         }

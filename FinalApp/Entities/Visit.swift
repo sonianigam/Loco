@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class Visit: Object {
-    dynamic var date = NSDate()
-    dynamic var duration: Double = 0.0
-    dynamic var note = String()
+    var date = NSDate()
+    var duration: Double = 0.0
+    var note: String = ""
 }

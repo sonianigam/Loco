@@ -13,14 +13,12 @@ import RealmSwift
 import CoreLocation
 
 class KeyLocation: Object {
-    
-    dynamic var latitude: Double = 0
-    dynamic var longitude: Double = 0
-    dynamic var address: String = ""
-    dynamic var notes: String = ""
-    dynamic var locationTitle : String = ""
-    dynamic var time: Double = 0
-    dynamic var visits = List<Visit>()
-    dynamic var inside: Bool = false
-
+    var latitude: Double = 0
+    var longitude: Double = 0
+    var address: String = ""
+    var notes: String = ""
+    var locationTitle : String = ""
+    var time: Double = 0
+    var visits = List<Visit>()
+    var inside: Bool = false
 }
