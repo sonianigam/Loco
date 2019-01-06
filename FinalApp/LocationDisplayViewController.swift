@@ -117,7 +117,7 @@ extension LocationDisplayViewController: UITableViewDataSource
         
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCell.EditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
     {
         
         if (editingStyle == .delete) {
@@ -127,7 +127,7 @@ extension LocationDisplayViewController: UITableViewDataSource
                 realm.delete(visit)
             }
             
-            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
             tableView.reloadData()
             
         }

@@ -145,7 +145,7 @@ extension LocationManager: CLLocationManagerDelegate {
         let realm = try! Realm()
         print("set the entry date")
         entryDates[region.identifier] = NSDate()
-        keyLocations = realm.objects(KeyLocation)
+        keyLocations = realm.objects(KeyLocation.self)
         try! realm.write() {
             for trackedRegion in self.keyLocations! {
                 let keyLocation = trackedRegion as KeyLocation
@@ -178,7 +178,7 @@ extension LocationManager: CLLocationManagerDelegate {
             var visit = Visit()
             visit.date = entryDate
             visit.duration = timeInterval
-            keyLocations = realm.objects(KeyLocation)
+            keyLocations = realm.objects(KeyLocation.self)
             
             if visit.duration < 90
             {

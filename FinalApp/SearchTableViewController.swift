@@ -69,7 +69,7 @@ class SearchTableViewController: UITableViewController, UISearchControllerDelega
         newLocationViewController?.searchController.searchBar.text = mapItem.name
         
         //automatic zoom into new annotation
-        let zoomRegion: MKCoordinateRegion = MKCoordinateRegionMakeWithDistance(self.pointAnnotation.coordinate, 1000, 1000)
+        let zoomRegion: MKCoordinateRegion = MKCoordinateRegion(center: self.pointAnnotation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         newLocationViewController?.mapView.setRegion(zoomRegion, animated: true)
         
         //clear prior search results
@@ -99,7 +99,7 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
     func updateSearchResults(for searchController: UISearchController)
     {
         
-        let aRequest = MKLocalSearchRequest()
+        let aRequest = MKLocalSearch.Request()
         aRequest.naturalLanguageQuery = searchController.searchBar.text
         
         //if current location is not set this throws an error

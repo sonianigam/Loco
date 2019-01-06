@@ -35,8 +35,7 @@ class HomeViewController: UITableViewController {
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
-        //println(keyLocations)
-        NotificationCenter.default.addObserver(self, selector: "refreshKeyLocations", name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: Selector("refreshKeyLocations"), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     func descending(d1: KeyLocation, d2: KeyLocation) -> Bool{
@@ -49,10 +48,6 @@ class HomeViewController: UITableViewController {
     }
     
     func refreshKeyLocations() {
-        let realm = try! Realm()
-        
-        keyLocations = self.realm.objects(KeyLocation).sorted(byKeyPath: "time", ascending: false)
-        
         //LOADING UP DATA FOR DEMO DAY *********************************************************************************
         
 //        if keyLocations.count < 1
@@ -212,7 +207,7 @@ extension HomeViewController {
         return Int(keyLocations?.count ?? 0)
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if (editingStyle == .delete) {
             let keyLocation = keyLocations[indexPath.row]
@@ -221,7 +216,7 @@ extension HomeViewController {
             try! realm.write() {
                 realm.delete(keyLocation)
             }
-            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
             tableView.reloadData()
             
         }

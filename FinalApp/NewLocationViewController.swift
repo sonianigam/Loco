@@ -65,7 +65,6 @@ class NewLocationViewController: UITableViewController {
     }
     
     @IBAction func trackButtonTapped(sender: AnyObject) {
-        
         let isAuth = checkForLocationAuth()
         
         if userGeneratedName.text == "" {
@@ -103,7 +102,7 @@ class NewLocationViewController: UITableViewController {
                 message: "In order to track locations, please open settings and set Loco's location access to 'Always'.",
                 preferredStyle: .alert)
             let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-                if let url = NSURL(string:UIApplicationOpenSettingsURLString) {
+                if let url = NSURL(string:UIApplication.openSettingsURLString) {
                     UIApplication.shared.openURL(url as URL)
                 }
             }
@@ -133,9 +132,9 @@ class NewLocationViewController: UITableViewController {
     
     func startMonitoringTrackedRegion (trackedRegion: KeyLocation)
     {
-        var region = setTrackedRegion(trackedRegion: trackedRegion)
         print("inside this region")
        // locationManager.requestStateForRegion(region)
+        let region = setTrackedRegion(trackedRegion: trackedRegion)
         locationManager.startMonitoring(for: region)
 
         if region.contains(self.sharedLocation.currentLocation.coordinate)
