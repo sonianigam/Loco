@@ -27,13 +27,13 @@ class NewLocationViewController: UITableViewController {
     var searchTableViewController: SearchTableViewController?
     var placeholderLabel : UILabel!
     var searchController: UISearchController!
-    var trackButton: UIButton!
     let locationManager = LocationManager.sharedLocationManager.locationManager
     
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var userGeneratedName: UITextField!
+    @IBOutlet weak var trackButton: UIButton!
     
     // MARK: ************************************************************************
     
@@ -88,7 +88,7 @@ class NewLocationViewController: UITableViewController {
             }
             
             startMonitoringTrackedRegion(trackedRegion: setLocation)
-            self.navigationController?.popToRootViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
         
     }

@@ -26,6 +26,10 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Loco will only use your location to track how much time you spend at the locations you save!</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Loco will only use your location to track how much time you spend at the locations you save!</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Loco will only use your location to track how much time you spend at the locations you save!</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

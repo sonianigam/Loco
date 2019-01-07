@@ -65,7 +65,7 @@
                     <navigationItem key="navigationItem" title="your last 24 hours" id="ZMA-SH-meK" userLabel="Home" propertyAccessControl="none">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="dXR-C0-0PI">
                             <connections>
-                                <segue destination="B7Y-Wn-3Eg" kind="show" identifier="segueToNewLocation" id="WSf-ll-9gx"/>
+                                <segue destination="B7Y-Wn-3Eg" kind="presentation" id="3cj-wL-oa9"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -401,7 +401,7 @@
                     <connections>
                         <outlet property="mapView" destination="ZRl-Ci-vwB" id="qY4-e3-QX4"/>
                         <outlet property="textView" destination="R47-Lf-SV7" id="K4A-Ye-T74"/>
-                        <outlet property="trackButton" destination="Xad-s9-Ykt" id="icb-uN-lNF"/>
+                        <outlet property="trackButton" destination="Xad-s9-Ykt" id="3Io-jP-qOQ"/>
                         <outlet property="userGeneratedName" destination="uNl-KG-RNb" id="Vjh-bl-Rda"/>
                     </connections>
                 </tableViewController>

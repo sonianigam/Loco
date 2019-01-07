@@ -26,8 +26,7 @@ class HomeViewController: UITableViewController {
             tableView?.reloadData()
         }
     }
-    
-    
+
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -35,14 +34,12 @@ class HomeViewController: UITableViewController {
         tableView.delegate = self
         self.tableView.separatorColor = StyleConstants.defaultColor
         locationManager.requestAlwaysAuthorization()
-        NotificationCenter.default.addObserver(self, selector: Selector("refreshKeyLocations"), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     func descending(d1: KeyLocation, d2: KeyLocation) -> Bool{
         return d1.time > d2.time
     }
-    
-    
+
     override func viewDidAppear(_ animated: Bool) {
         refreshKeyLocations()
     }
@@ -50,23 +47,21 @@ class HomeViewController: UITableViewController {
     func refreshKeyLocations() {
         //LOADING UP DATA FOR DEMO DAY *********************************************************************************
         
-//        if keyLocations.count < 1
-//        {
 //            var location1 = KeyLocation()
 //            location1.locationTitle = "Starbucks ☕️"
 //            var location1Visit1 = Visit()
-//            let location1V1C = NSDateComponents()
-//            location1V1C.year = 2015
-//            location1V1C.month = 8
+//            var location1V1C = DateComponents()
+//            location2V1C.year = 2015
+//            location2V1C.month = 8
 //            location1V1C.day = 14
 //            location1V1C.hour = 8
 //            location1V1C.minute = 30
 //            location1V1C.second = 05
 //            location1Visit1.duration = 340
-//            location1Visit1.date = NSCalendar.currentCalendar().dateFromComponents(location1V1C)!
+//            location1Visit1.date = Calendar.current.dateComponents(location1V1C)!
 //            location1.visits.append (location1Visit1)
-//            
-//            
+            
+            
 //            var location2 = KeyLocation()
 //            location2.locationTitle = "Home 🏡"
 //            var location2Visit1 = Visit()
@@ -78,9 +73,9 @@ class HomeViewController: UITableViewController {
 //            location2V1C.minute = 27
 //            location2V1C.second = 25
 //            location2Visit1.duration = 7258
-//            location2Visit1.date = NSCalendar.currentCalendar().dateFromComponents(location2V1C)!
+//            location2Visit1.date = Calendar.current.dateComponents(location2V1C)!
 //            location2.visits.append (location2Visit1)
-//            
+//
 //            var location2Visit2 = Visit()
 //            let location2V2C = NSDateComponents()
 //            location2V2C.year = 2015
@@ -90,9 +85,9 @@ class HomeViewController: UITableViewController {
 //            location2V2C.minute = 04
 //            location2V2C.second = 48
 //            location2Visit2.duration = 32400
-//            location2Visit2.date = NSCalendar.currentCalendar().dateFromComponents(location2V2C)!
+//            location2Visit2.date = Calendar.current.dateComponents(location2V2C)!
 //            location2.visits.append (location2Visit2)
-//            
+//
 //            var location2Visit3 = Visit()
 //            let location2V3C = NSDateComponents()
 //            location2V3C.year = 2015
@@ -102,10 +97,10 @@ class HomeViewController: UITableViewController {
 //            location2V3C.minute = 58
 //            location2V3C.second = 52
 //            location2Visit3.duration = 31400
-//            location2Visit3.date = NSCalendar.currentCalendar().dateFromComponents(location2V3C)!
+//            location2Visit3.date = Calendar.current.dateComponents(location2V3C)!
 //            location2.visits.append (location2Visit3)
-//            
-//            
+//
+//
 //            var location3 = KeyLocation()
 //            location3.locationTitle = "Golf Course ⛳️"
 //            var location3Visit1 = Visit()
@@ -117,10 +112,10 @@ class HomeViewController: UITableViewController {
 //            location3V1C.minute = 45
 //            location3V1C.second = 10
 //            location3Visit1.duration = 14400
-//            location3Visit1.date = NSCalendar.currentCalendar().dateFromComponents(location3V1C)!
+//            location3Visit1.date = Calendar.current.dateComponents(location3V1C)!
 //            location3.visits.append (location3Visit1)
-//            
-//            
+//
+//
 //            var location4 = KeyLocation()
 //            location4.locationTitle = "Library 📚"
 //            var location4Visit1 = Visit()
@@ -132,22 +127,20 @@ class HomeViewController: UITableViewController {
 //            location4V1C.minute = 17
 //            location4V1C.second = 10
 //            location4Visit1.duration = 6000
-//            location4Visit1.date = NSCalendar.currentCalendar().dateFromComponents(location4V1C)!
+//            location4Visit1.date = Calendar.current.dateFromComponents(location4V1C)!
 //            location4.visits.append (location4Visit1)
-//            
-//            
-//            realm.write()
+            
+            
+//            try! realm.write()
 //                {
 //                    realm.add(location1)
-//                    realm.add(location2)
-//                    realm.add(location3)
-//                    realm.add(location4)
+////                    realm.add(location2)
+////                    realm.add(location3)
+////                    realm.add(location4)
 //            }
-//        }
-        
+
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
         keyLocations = self.realm.objects(KeyLocation.self).sorted(byKeyPath: "time", ascending: false)
-        
-        
         
         tableView.reloadData()
     }
@@ -240,9 +233,3 @@ extension HomeViewController {
     }
     
 }
-
-
-
-
-
-

@@ -161,7 +161,7 @@ extension LocationManager: CLLocationManagerDelegate {
                 }
             }
         }
-        
+        print("I entered")
         print("entry date ----> \(entryDates[region.identifier])")
         
         
@@ -171,6 +171,7 @@ extension LocationManager: CLLocationManagerDelegate {
     func handleRegionExitEvent(region: CLRegion!)
     {
         
+        print("I exited")
         let realm = try! Realm()
         if let entryDate = entryDates[region.identifier] {
             let exitDate = NSDate();
