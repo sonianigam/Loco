@@ -24,7 +24,6 @@
 		E3D8A13B1B66CE6300115815 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A13A1B66CE6300115815 /* AppDelegate.swift */; };
 		E3D8A1421B66CE6300115815 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1411B66CE6300115815 /* Images.xcassets */; };
 		E3D8A1451B66CE6300115815 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A1431B66CE6300115815 /* LaunchScreen.xib */; };
-		E3D8A1511B66CE6300115815 /* FinalAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A1501B66CE6300115815 /* FinalAppTests.swift */; };
 		E3D8A15C1B66CEB800115815 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A15A1B66CEB800115815 /* HomeViewController.swift */; };
 		E3D8A15D1B66CEB800115815 /* NewLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D8A15B1B66CEB800115815 /* NewLocationViewController.swift */; };
 		E3D8A15F1B66CEE800115815 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3D8A15E1B66CEE800115815 /* Main.storyboard */; };
@@ -80,7 +79,6 @@
 		E3D8A1441B66CE6300115815 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E3D8A14A1B66CE6300115815 /* FinalAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FinalAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D8A14F1B66CE6300115815 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E3D8A1501B66CE6300115815 /* FinalAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalAppTests.swift; sourceTree = "<group>"; };
 		E3D8A15A1B66CEB800115815 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E3D8A15B1B66CEB800115815 /* NewLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewLocationViewController.swift; sourceTree = "<group>"; };
 		E3D8A15E1B66CEE800115815 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 		E3D8A14D1B66CE6300115815 /* FinalAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				E3D8A1501B66CE6300115815 /* FinalAppTests.swift */,
 				E3D8A14E1B66CE6300115815 /* Supporting Files */,
 			);
 			path = FinalAppTests;
@@ -435,7 +432,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3D8A1511B66CE6300115815 /* FinalAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +610,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinalApp.app/FinalApp";
 			};
 			name = Debug;
@@ -634,6 +631,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinalApp.app/FinalApp";
 			};
 			name = Release;
